@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+body {
+    font-family: 'Radio Canada Big';
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+header {
+    background-color: #033ce8;
+    color: white;
+    padding: 10px 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.navbar h1 {
+    margin: 0;
+}
+
+.navbar nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar nav ul li {
+    margin-left: 20px;
+}
+
+.navbar nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.welcome-section {
+    text-align: center;
+    padding: 20px;
+    background-color: #0080ffa0;
+    color: #f8f9fa;
+}
+
+.welcome-section img {
+    max-width: 50%;
+    height: auto;
+}
+
+.movie-picker-section, .action-buttons {
+    text-align: center;
+    padding: 20px;
+}
+
+button {
+    color: #090909;
+    padding: 0.7em 1.7em;
+    font-family: 'Radio Canada Big', 'Roboto', sans-serif;
+    font-size: 18px;
+    border-radius: 0.5em;
+    background: #e8e8e8;
+    cursor: pointer;
+    border: 1px solid #e8e8e8;
+    transition: all 0.3s;
+    box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+}
+
+button:hover {
+    border: 1px solid white;
+}
+
+button:active {
+    box-shadow: 4px 4px 12px #c5c5c5, -4px -4px 12px #ffffff;
+}
+  
+
+.movie-display-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.movie-poster img {
+    max-width: 200px;
+    margin-right: 20px;
+}
+
+.footer-links, .social-media-icons, .contact-info {
+    text-align: center;
+    padding: 10px;
+}
+
+.footer-links a, .contact-info p {
+    display: block;
+}
+
+.social-media-icons img {
+    width: 30px;
+    margin: 0 10px;
+}
