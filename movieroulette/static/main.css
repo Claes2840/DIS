@@ -70,3 +70,24 @@ li a {
 li a:hover:not(.active) {
   color: rgba(255, 255, 240, 0.726);
 }
+.contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.contactUser {
+  padding: 10px 20px;
+  margin: 10px 0;
+  width: 300px;
+  box-shadow: 0 0 10px #ddd;
+  text-align: center;
+}
+.contactText {
+  color: #ffffff;
+  margin: 0;
+}
+.contactEmail {
+  color: #ffffff;
+  font-size: 14px;
+  margin-top: 5px;
+}
