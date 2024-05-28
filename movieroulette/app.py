@@ -6,13 +6,21 @@ from flask_bcrypt import Bcrypt
 import os
 
 app = Flask(__name__ , static_url_path='/static')
+db = "dbname='MovieRoulette' user='jacobsiegumfeldt' host='localhost' password='dis'"
+conn = psycopg2.connect(db)
+cursor = conn.cursor()
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    if request.method == 'POST':
-        genres = request.form.getlist('genres')
-        print(genres)
-    return render_template('index.html')
+    cur = conn.cursor()
+    #Getting 10 random rows from Movies
+    twelve_rand = '''SELECT * FROM Movies ORDER BY random() LIMIT 12;'''
+    cur.execute(twelve_rand)
+    movies = list(cur.fetchall())
+    length = len(movies)    
+    genres = []
+    print(movies[0][0])
+    return render_template('index.html', selected_options=genres, content=movies, length=length)
 
 @app.route("/contact")
 def contact():
