@@ -270,19 +270,26 @@ form {
 }
 
 .contact {
-  padding-left: 25rem;
-  padding-top: 15rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .contactUser {
-  padding-bottom: 10px;
-  height: 100px;
+  padding: 10px 20px;
+  margin: 10px 0;
+  width: 300px;
+  box-shadow: 0 0 10px #ddd;
+  text-align: center;
 }
 .contactText {
-  vertical-align: middle;
-  line-height: 100px; 
-  color: ivory;
+  color: #ffffff;
+  margin: 0;
 }
-
+.contactEmail {
+  color: #ffffff;
+  font-size: 14px;
+  margin-top: 5px;
+}
 .input {
   height: 10px;
   width: 170px;  
