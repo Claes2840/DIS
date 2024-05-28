@@ -10,8 +10,12 @@ app = Flask(__name__ , static_url_path='/static')
 @app.route("/", methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
+        year = "NaN"
+        title = ""
+        maxRuntime = "NaN"
         genres = request.form.getlist('genres')
-        print(genres)
+        avgRating = "NaN"
+        return redirect( url_for("queryMovie", year=year, title=title, maxRuntime=maxRuntime, genres=genres, avgRating=avgRating))
     return render_template('index.html')
 
 @app.route("/contact")
@@ -21,6 +25,40 @@ def contact():
 if __name__ == "__main__":
     app.secret_key = os.urandom(12)
     app.run(debug=True, port=5002)
+    
+@app.route("/movie/<year>/<title>/<maxRuntime>/<genres>/<avgRating>")
+def queryMovie(year, title, maxRuntime, genres, avgRating):
+    genres = request.form.getlist('genres')
+    num = 0
+    sqlcode = f'''select * from movies where '''
+    if (year != "NaN"):
+        num += 1
+        sqlcode += f''' year = {year} and '''
+    
+    if (title != ""):
+        #TODO
+        print("Not implemented properly")
+    
+    if (maxRuntime != "NaN"):
+        num += 1
+        sqlcode += f''' runtime < {maxRuntime} and '''
+
+    if (genres != []):
+        num += 1
+        for genre in genres:
+            #sqlcode += f''' genres < {genre} and '''
+            print("genres not implemented")
+    if (avgRating != "NaN"):
+        num += 1
+        sqlcode += f''' averageRating > {avgRating} and '''
+        
+    if (num == 0):
+        sqlcode = f'''select * from movies '''
+        
+    else :
+        sqlcode = sqlcode[:-3]
+
+
 
 # # set your own database name, username and password
 # db = "dbname='nft_crypto_dis' user='jacobsiegumfeldt' host='localhost' password='dis'"
