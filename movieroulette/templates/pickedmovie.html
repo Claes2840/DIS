@@ -1,60 +1,11 @@
-<!-- {% extends "navbar.html" %} {% block content %}
-<h1>Hello</h1>
-<div class="imgdiv">
-    <img src="/static/posters/{{content[0]}}.jpg" alt="Movie" class="imagebig" />
-</div>
-{% endblock content %} -->
 
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Film Information</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #000000;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #ffffff;
-        }
-        .container {
-            background-color: #333333;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-            text-align: center;
-            max-width: 400px;
-        }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #ffffff;
-        }
-        p {
-            margin: 5px 0;
-            color: #dddddd;
-        }
-        img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-    </style>
-</head>
-<body>
+{% extends "navbar.html" %} {% block content %}
     <div class="container">
-        <img src="https://via.placeholder.com/350x200" alt="Film Plakat">
-        <h1>Film Titel: Inception</h1>
-        <p><strong>Instruktør:</strong> Christopher Nolan</p>
-        <p><strong>Skuespillere:</strong> Leonardo DiCaprio, Joseph Gordon-Levitt, Ellen Page</p>
-        <p><strong>Udgivelsesår:</strong> 2010</p>
+        <img src="/static/posters/{{content[0]}}.jpg" alt="Movie" class="imagebig"/>
+        <h1> {{content[2]}}</h1>
+        <p><strong>Release year:</strong> {{content[1]}}</p>
+        <p><strong>Runtime:</strong> {{content[4]}} minutes</p>
+        <p><strong>Genre(s):</strong> {{content[5]}}</p>
+        <p><strong>IMDb-rating:</strong> {{content[6]}}</p>
     </div>
-</body>
-</html>
+{% endblock content %}

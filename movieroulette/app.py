@@ -12,18 +12,22 @@ cursor = conn.cursor()
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    cur = conn.cursor()
-    #Getting 10 random rows from Movies
-    twelve_rand = '''SELECT * FROM Movies ORDER BY random() LIMIT 12;'''
-    cur.execute(twelve_rand)
-    movies = list(cur.fetchall())
+    curr = conn.cursor()
+    # Getting 10 random rows from Movies
+    twelve_rand = '''
+        SELECT * FROM Movies WHERE averageRating >= 8.0 ORDER BY random() LIMIT 12;
+    '''
+    curr.execute(twelve_rand)
+    movies = list(curr.fetchall())
     length = len(movies)    
-    genres = []
+
     if request.method == 'POST':
-        genres = request.form.getlist('genres')
-        print(genres)
-        
-    return render_template('index.html', selected_options=genres, content=movies, length=length)
+        selected_options = request.form.getlist('genres')
+        session['selected_options'] = selected_options
+        return redirect(url_for('home'))
+
+    selected_options = session.get('selected_options', [])
+    return render_template('index.html', selected_options=selected_options, content=movies, length=length)
 
 @app.route("/contact")
 def contact():
@@ -35,9 +39,12 @@ def picked_movie(movieid):
     pick_movie = f'''SELECT * FROM Movies WHERE id=\'{movieid}\''''
     cur.execute(pick_movie)    
     pick = cur.fetchone()
-    print(pick)
+    
+    # Resetting the previously selected options.
+    session['selected_options'] = []
+    
     return render_template('pickedmovie.html', content=pick)
 
 if __name__ == "__main__":
     app.secret_key = os.urandom(12)
-    app.run(debug=True, port=5002)
+    app.run(debug=True, port=5003)
