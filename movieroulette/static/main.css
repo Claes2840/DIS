@@ -15,6 +15,44 @@ h2 {
   text-align: center;
 }
 
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.imagebig {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 2em;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+p {
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+p strong {
+  color: #555;
+}
+
+/* Add some styling to the strong elements */
+p strong {
+  color: #007bff;
+}
+
 label {
   margin: auto;
 }
@@ -139,9 +177,10 @@ p.card-text {
 }
 
 .imagebig {
-  height: 400px;
-  width: 400px;  
-  image-rendering: pixelated;
+  height: 421px;
+  width: 285px;  
+  image-rendering: optimizeQuality;
+  margin: auto;
 }
 
 .imgdiv {
@@ -172,7 +211,7 @@ p.card-text {
 }
 
 /* Add some padding inside the card container */
-.container {
+.card-container {
   background-color: #000000;
   padding: 2px 16px;
   height: 146px;
