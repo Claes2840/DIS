@@ -1,8 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, session, abort, request, flash
-import requests
-from bs4 import BeautifulSoup
 import psycopg2
-from flask_bcrypt import Bcrypt
 import os
 
 app = Flask(__name__ , static_url_path='/static')
