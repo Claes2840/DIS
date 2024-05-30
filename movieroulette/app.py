@@ -6,9 +6,51 @@ from flask_bcrypt import Bcrypt
 import os
 
 app = Flask(__name__ , static_url_path='/static')
-db = "dbname='MovieRoulette' user='jacobsiegumfeldt' host='localhost' password='dis'"
+db = "dbname='MovieRoulette' user='postgres' host='localhost' password='Lykkehvid123'"
 conn = psycopg2.connect(db)
 cursor = conn.cursor()
+
+def genre_filter(genres):
+    sql = '''('''
+    for genre in genres:
+        sql += f'''genres ~ '{genre}' OR '''
+    return sql[:-3] + ''')'''
+
+def keyword_filter(keyword):
+    return f'''(primarytitle ~ '{keyword}' OR originaltitle ~ '{keyword}') '''
+
+def releaseyear_filter(year):
+    return f'''(year = {year}) '''
+
+
+def pick_random_movie(genres, keyword, releaseyear):
+    sqlcode = '''SELECT id FROM MOVIES WHERE '''
+    cond = False
+    if not (genres == []):
+        cond = True
+        sqlcode += genre_filter(genres) + ''' AND '''
+    if not (keyword == ''):
+        cond = True
+        sqlcode += keyword_filter(keyword) + ''' AND '''
+    if not (releaseyear == None):
+        cond = True
+        sqlcode += releaseyear_filter(releaseyear) + ''' AND '''
+    
+    if (cond):
+        sqlcode = sqlcode[:-4]
+    else:
+        sqlcode = sqlcode[:-6]
+    sqlcode += ''' ORDER BY random() LIMIT 1;'''
+    print(sqlcode)
+    curr = conn.cursor()
+    curr.execute(sqlcode)
+    movieid = (curr.fetchone())
+    if (movieid == None):
+        #PRINT TIL BRUGEREN AT DER IKKE FINDES EN FILM
+        return redirect(url_for('home'))
+    
+    return redirect(url_for('picked_movie', movieid=movieid[0]))
+
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
@@ -23,8 +65,14 @@ def home():
 
     if request.method == 'POST':
         selected_options = request.form.getlist('genres')
+        keyword = request.form.get('keyword', type=str)
+        releaseyear = (request.form.get('releaseyear', type=int))
+        
         session['selected_options'] = selected_options
-        return redirect(url_for('home'))
+        
+        return pick_random_movie(selected_options, keyword, releaseyear)
+    
+        # return redirect(url_for('home'))
 
     selected_options = session.get('selected_options', [])
     return render_template('index.html', selected_options=selected_options, content=movies, length=length)
@@ -35,8 +83,9 @@ def contact():
 
 @app.route("/pickedmovie/<movieid>")
 def picked_movie(movieid):
+    #Tilføj en ekstra knap 'generate' som generere en ny film ud fra de samme kritier
     cur = conn.cursor()
-    pick_movie = f'''SELECT * FROM Movies WHERE id=\'{movieid}\''''
+    pick_movie = f'''SELECT * FROM Movies WHERE id= '{movieid}' '''
     cur.execute(pick_movie)    
     pick = cur.fetchone()
     
