@@ -64,18 +64,17 @@ def home():
     length = len(movies)    
 
     if request.method == 'POST':
-        selected_options = request.form.getlist('genres')
+        genres_picked = request.form.getlist('genres')
         keyword = request.form.get('keyword', type=str)
-        releaseyear = (request.form.get('releaseyear', type=int))
+        releaseyear = request.form.get('releaseyear', type=int)
         
-        session['selected_options'] = selected_options
+        # Saving which genres the user picked.
+        session['genres_picked'] = genres_picked
         
-        return pick_random_movie(selected_options, keyword, releaseyear)
-    
-        # return redirect(url_for('home'))
+        return pick_random_movie(genres_picked, keyword, releaseyear)
 
-    selected_options = session.get('selected_options', [])
-    return render_template('index.html', selected_options=selected_options, content=movies, length=length)
+    genres_picked = session.get('genres_picked', [])
+    return render_template('index.html', genres_picked=genres_picked, content=movies, length=length)
 
 @app.route("/contact")
 def contact():
@@ -90,7 +89,7 @@ def picked_movie(movieid):
     pick = cur.fetchone()
     
     # Resetting the previously selected options.
-    session['selected_options'] = []
+    session['genres_picked'] = []
     
     return render_template('pickedmovie.html', content=pick)
 

@@ -5,61 +5,61 @@
     <form method="post" class="filter-container">
         <div class="filter-container" style="margin-bottom: 0px;">
             <div class="customCheckBoxHolder">
-                <input type="checkbox" id="cCB1" class="customCheckBoxInput" name="genres" value="Action" {% if 'Action' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB1" class="customCheckBoxInput" name="genres" value="Action" {% if 'Action' in genres_picked %}checked{% endif %}>
                 <label for="cCB1" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">Action</div>
                     </div>
                 </label>
-                <input type="checkbox" id="cCB2" class="customCheckBoxInput" name="genres" value="Adventure" {% if 'Adventure' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB2" class="customCheckBoxInput" name="genres" value="Adventure" {% if 'Adventure' in genres_picked %}checked{% endif %}>
                 <label for="cCB2" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">Adventure</div>
                     </div>
                 </label>
-                <input type="checkbox" id="cCB3" class="customCheckBoxInput" name="genres" value="Comedy" {% if 'Comedy' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB3" class="customCheckBoxInput" name="genres" value="Comedy" {% if 'Comedy' in genres_picked %}checked{% endif %}>
                 <label for="cCB3" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">Comedy</div>
                     </div>
                 </label>
-                <input type="checkbox" id="cCB4" class="customCheckBoxInput" name="genres" value="Crime" {% if 'Crime' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB4" class="customCheckBoxInput" name="genres" value="Crime" {% if 'Crime' in genres_picked %}checked{% endif %}>
                 <label for="cCB4" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">Crime</div>
                     </div>
                 </label>
-                <input type="checkbox" id="cCB5" class="customCheckBoxInput" name="genres" value="Drama" {% if 'Drama' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB5" class="customCheckBoxInput" name="genres" value="Drama" {% if 'Drama' in genres_picked %}checked{% endif %}>
                 <label for="cCB5" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">Drama</div>
                     </div>
                 </label>
-                <input type="checkbox" id="cCB6" class="customCheckBoxInput" name="genres" value="Horror" {% if 'Horror' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB6" class="customCheckBoxInput" name="genres" value="Horror" {% if 'Horror' in genres_picked %}checked{% endif %}>
                 <label for="cCB6" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">Horror</div>
                     </div>
                 </label>
-                <input type="checkbox" id="cCB7" class="customCheckBoxInput" name="genres" value="Musical" {% if 'Musical' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB7" class="customCheckBoxInput" name="genres" value="Musical" {% if 'Musical' in genres_picked %}checked{% endif %}>
                 <label for="cCB7" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">Musical</div>
                     </div>
                 </label>
-                <input type="checkbox" id="cCB8" class="customCheckBoxInput" name="genres" value="Mystery" {% if 'Mystery' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB8" class="customCheckBoxInput" name="genres" value="Mystery" {% if 'Mystery' in genres_picked %}checked{% endif %}>
                 <label for="cCB8" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">Mystery</div>
                     </div>
                 </label>
-                <input type="checkbox" id="cCB9" class="customCheckBoxInput" name="genres" value="Romance" {% if 'Romance' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB9" class="customCheckBoxInput" name="genres" value="Romance" {% if 'Romance' in genres_picked %}checked{% endif %}>
                 <label for="cCB9" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">Romance</div>
                     </div>
                 </label>
-                <input type="checkbox" id="cCB10" class="customCheckBoxInput" name="genres" value="Sci-Fi" {% if 'Sci-Fi' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB10" class="customCheckBoxInput" name="genres" value="Sci-Fi" {% if 'Sci-Fi' in genres_picked %}checked{% endif %}>
                 <label for="cCB10" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">Sci-Fi</div>
@@ -67,61 +67,61 @@
                 </label>
             </div>
             <div class="customCheckBoxHolder">
-                <input type="checkbox" id="cCB11" class="customCheckBoxInput" name="genres" value="Thriller" {% if 'Thriller' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB11" class="customCheckBoxInput" name="genres" value="Thriller" {% if 'Thriller' in genres_picked %}checked{% endif %}>
                 <label for="cCB11" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">Thriller</div>
                     </div>
                 </label>
-                <input type="checkbox" id="cCB12" class="customCheckBoxInput" name="genres" value="Animation" {% if 'Animation' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB12" class="customCheckBoxInput" name="genres" value="Animation" {% if 'Animation' in genres_picked %}checked{% endif %}>
                 <label for="cCB12" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">Animation</div>
                     </div>
                 </label>
-                <input type="checkbox" id="cCB13" class="customCheckBoxInput" name="genres" value="Biography" {% if 'Biography' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB13" class="customCheckBoxInput" name="genres" value="Biography" {% if 'Biography' in genres_picked %}checked{% endif %}>
                 <label for="cCB13" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">Biography</div>
                     </div>
                 </label>
-                <input type="checkbox" id="cCB14" class="customCheckBoxInput" name="genres" value="Concert" {% if 'Concert' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB14" class="customCheckBoxInput" name="genres" value="Concert" {% if 'Concert' in genres_picked %}checked{% endif %}>
                 <label for="cCB14" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">Concert</div>
                     </div>
                 </label>
-                <input type="checkbox" id="cCB15" class="customCheckBoxInput" name="genres" value="History" {% if 'History' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB15" class="customCheckBoxInput" name="genres" value="History" {% if 'History' in genres_picked %}checked{% endif %}>
                 <label for="cCB15" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">History</div>
                     </div>
                 </label>
-                <input type="checkbox" id="cCB16" class="customCheckBoxInput" name="genres" value="Family" {% if 'Family' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB16" class="customCheckBoxInput" name="genres" value="Family" {% if 'Family' in genres_picked %}checked{% endif %}>
                 <label for="cCB16" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">Family</div>
                     </div>
                 </label>
-                <input type="checkbox" id="cCB17" class="customCheckBoxInput" name="genres" value="Fantasy" {% if 'Fantasy' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB17" class="customCheckBoxInput" name="genres" value="Fantasy" {% if 'Fantasy' in genres_picked %}checked{% endif %}>
                 <label for="cCB17" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">Fantasy</div>
                     </div>
                 </label>
-                <input type="checkbox" id="cCB18" class="customCheckBoxInput" name="genres" value="War" {% if 'War' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB18" class="customCheckBoxInput" name="genres" value="War" {% if 'War' in genres_picked %}checked{% endif %}>
                 <label for="cCB18" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">War</div>
                     </div>
                 </label>
-                <input type="checkbox" id="cCB19" class="customCheckBoxInput" name="genres" value="Western" {% if 'Western' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB19" class="customCheckBoxInput" name="genres" value="Western" {% if 'Western' in genres_picked %}checked{% endif %}>
                 <label for="cCB19" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">Western</div>
                     </div>
                 </label>
-                <input type="checkbox" id="cCB20" class="customCheckBoxInput" name="genres" value="Sport" {% if 'Sport' in selected_options %}checked{% endif %}>
+                <input type="checkbox" id="cCB20" class="customCheckBoxInput" name="genres" value="Sport" {% if 'Sport' in genres_picked %}checked{% endif %}>
                 <label for="cCB20" class="customCheckBoxWrapper">
                     <div class="customCheckBox">
                         <div class="inner">Sport</div>
