@@ -14,7 +14,10 @@ def genre_filter(genres):
     return sql[:-3] + ''')'''
 
 def keyword_filter(keyword):
-    return f'''(primarytitle ~ '{keyword}' OR originaltitle ~ '{keyword}') '''
+    # Using (case-insensitive) regexes to find titles.
+    return f'''
+        (primarytitle ~* '{keyword}' OR originaltitle ~* '{keyword}') AND 
+    '''
 
 def releaseyear_filter(year):
     return f'''(year = {year}) '''
