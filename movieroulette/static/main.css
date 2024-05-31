@@ -7,14 +7,6 @@ body {
   text-decoration: none;
 }
 
-h1 {
-  text-align: center;
-}
-
-h2 {
-  text-align: center;
-}
-
 .container {
   max-width: 800px;
   margin: 20px auto;
@@ -24,18 +16,15 @@ h2 {
   border-radius: 8px;
 }
 
-.imagebig {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  margin-bottom: 20px;
+h1, h2 {
+  text-align: center;
 }
 
-h1 {
-  font-size: 2em;
-  margin-bottom: 10px;
-  color: #333;
+h4 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 2px;
+  width: max-content;
 }
 
 p {
@@ -64,15 +53,6 @@ label {
   margin-bottom: 5px;
 }
 
-.checkbox-container {
-  display: grid;
-  grid-auto-flow: column dense; /* column flow with "dense" to fill all the cells */
-  grid-template-rows: 50px 50px; /* 2 rows */
-  grid-auto-columns: 50px;
-  gap: 10px; /* add gap between the grid items */
-  column-gap: 60px;
-}
-
 .filter-container {
   display: flex;
   flex-direction: column;
@@ -81,7 +61,7 @@ label {
 }
 
 .filter-container div {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 input::-webkit-outer-spin-button,
@@ -139,6 +119,88 @@ h4.movietitle {
   text-decoration: none; /* Ensure no underline */
 }
 
+.coolinput {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  position: static;
+  max-width: 240px;
+}
+
+.coolinput label.text {
+  font-size: 0.75rem;
+  color: #8416af;
+  font-weight: 700;
+  position: relative;
+  top: 0.5rem;
+  margin: 0 0 0 7px;
+  padding: 0 3px;
+  background: #f4f4f4;
+  width: fit-content;
+}
+
+.coolinput input[type=text].input {
+  padding: 11px 10px;
+  font-size: 0.75rem;
+  border: 2px #8416af solid;
+  border-radius: 5px;
+  background: #f4f4f4;
+}
+
+.coolinput input[type=text].input:focus {
+  outline: none;
+}
+
+.range-container {
+  display: flex;
+  margin: auto;
+  gap: 13px;
+}
+
+.range-wrapper {
+  border-style: solid !important;
+  border: #8416af;
+  background-color: #8416af0f;
+  padding-top: 1%;
+  padding-left: 1%;
+  padding-right: 1%;
+  padding-bottom: 0;
+  border-radius: 10%;
+}
+
+.inner-range-wrapper p {
+  margin-top: 2%;
+  margin-bottom: 0;
+}
+
+.inner-range-wrapper {
+  padding-top: 8px;
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+}
+
+.input-style {
+  width: 17px;
+  height: 10px;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #555;
+  outline: none;
+  text-align: center;
+}
+
+.input-style:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.input-style:focus::placeholder {
+  color: transparent;
+}
+
 p.card-text {
   font-size: 0.6em;
   color: #ffffff;
@@ -160,7 +222,7 @@ p.card-text {
 
 .contactText {
   color: #000000;
-  margin: 0;
+  margin-top: 12px;
 }
 
 .contactEmail {
@@ -168,6 +230,12 @@ p.card-text {
   font-size: 14px;
   margin-top: 5px;
   justify-content: center;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
 }
 
 .image {
@@ -180,7 +248,10 @@ p.card-text {
   height: 421px;
   width: 285px;  
   image-rendering: optimizeQuality;
-  margin: auto;
+  margin: 0 auto;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
 .imgdiv {
@@ -265,7 +336,6 @@ p.card-text {
   transform: translateY(-2px);
 }
 
-/* Multiple Checkboxes can be chained together for a radio input */
 .customCheckBoxWrapper:first-of-type .customCheckBox {
   border-bottom-left-radius: 5px;
   border-top-left-radius: 5px;
@@ -527,4 +597,135 @@ p.card-text {
 .sparkle-button svg {
   inline-size: 1.25em;
   translate: -25% -5%;
+}
+
+.checkbox-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 auto !important;
+  max-width: 90%;
+  box-sizing: border-box;
+}
+
+.checkbox-wrapper-4 * {
+  box-sizing: border-box;
+  color: #8416af;
+}
+
+.checkbox-wrapper-4 .cbx {
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  display: inline-block;
+  width: max-content;
+}
+
+.checkbox-wrapper-4 .cbx:not(:last-child) {
+  margin-right: 0;
+}
+
+.checkbox-wrapper-4 .cbx:hover {
+  background: rgba(132, 22, 175, 0.06);
+}
+
+.checkbox-wrapper-4 .cbx span {
+  float: left;
+  vertical-align: middle;
+  transform: translate3d(0, 0, 0);
+  padding-top: 1.7px;
+}
+
+.checkbox-wrapper-4 .cbx span:first-child {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  transform: scale(1);
+  border: 1px solid #cccfdb;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 1px rgba(0,16,75,0.05);
+}
+
+.checkbox-wrapper-4 .cbx span:first-child svg {
+  position: absolute;
+  top: 3px;
+  left: 2px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 16px;
+  stroke-dashoffset: 16px;
+  transition: all 0.3s ease;
+  transition-delay: 0.1s;
+  transform: translate3d(0, 0, 0);
+}
+
+.checkbox-wrapper-4 .cbx span:last-child {
+  padding-left: 8px;
+  line-height: 18px;
+}
+
+.checkbox-wrapper-4 .cbx:hover span:first-child {
+  border-color: #8416af;
+}
+
+.checkbox-wrapper-4 .inp-cbx {
+  position: absolute;
+  visibility: hidden;
+}
+
+.checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child {
+  background: #8416af;
+  border-color: #8416af;
+  animation: wave-4 0.4s ease;
+}
+
+.checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child svg {
+  stroke-dashoffset: 0;
+}
+
+.checkbox-wrapper-4 .inline-svg {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media screen and (max-width: 640px) {
+  .checkbox-wrapper-4 .cbx {
+    width: 100%;
+    display: inline-block;
+  }
+}
+
+@-moz-keyframes wave-4 {
+  50% {
+    transform: scale(0.9);
+  }
+}
+
+@-webkit-keyframes wave-4 {
+  50% {
+    transform: scale(0.9);
+  }
+}
+
+@-o-keyframes wave-4 {
+  50% {
+    transform: scale(0.9);
+  }
+}
+
+@keyframes wave-4 {
+  50% {
+    transform: scale(0.9);
+  }
 }

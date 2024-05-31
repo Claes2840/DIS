@@ -1,11 +1,15 @@
 
 {% extends "navbar.html" %} {% block content %}
     <div class="container">
-        <img src="/static/posters/{{content[0]}}.jpg" alt="Movie" class="imagebig"/>
+        <div class="image-container">
+            <a href="https://www.imdb.com/title/{{content[0]}}/" target="_blank">
+                <img src="{{content[5]}}" alt="Movie poster" class="imagebig"/>
+            </a>
+        </div>
         <h1> {{content[2]}}</h1>
         <p><strong>Release year:</strong> {{content[1]}}</p>
-        <p><strong>Runtime:</strong> {{content[4]}} minutes</p>
-        <p><strong>Genre(s):</strong> {{content[5]}}</p>
-        <p><strong>IMDb-rating:</strong> {{content[6]}}</p>
+        <p><strong>Runtime:</strong> {{content[2]}} minutes</p>
+        <p><strong>Genre(s):</strong> {{content[3]}}</p>
+        <p><strong>IMDb-rating:</strong> {{content[4]}}</p>
     </div>
 {% endblock content %}
