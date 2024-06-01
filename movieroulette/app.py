@@ -8,17 +8,22 @@ conn = psycopg2.connect(db)
 cursor = conn.cursor()
 
 def genre_filter(genres):
+    if not genres:
+        return ""
     genre_condition = "("
     for genre in genres:
         genre_condition += f"genres ~* '{genre}' OR "
     return genre_condition[:-4] + ") AND "
 
 def keyword_filter(keyword):
+    if keyword == "":
+        return ""
     # Using (case-insensitive) regexes to find titles.
     return f"(primaryTitle ~* '{keyword}' OR originalTitle ~* '{keyword}') AND "
 
-def releaseyear_filter(year):
-    return f"year = {year} AND "
+def rating_filter(rating_range):
+    min_rating, max_rating = rating_range
+    return f"(averageRating >= {min_rating} AND averageRating <= {max_rating}) AND "
 
 def releaseyear_filter(year_range):
     min_year, max_year = year_range
@@ -28,23 +33,11 @@ def releaseyear_filter(year_range):
 def pick_random_movie(criteria):
     genres, keyword, rating_range, year_range, director, actor = criteria
     query = "SELECT * FROM Movies WHERE "
-    min_one_criteria = False
-    if not (genres == []):
-        min_one_criteria = True
-        query += genre_filter(genres)
-    if not (keyword == ''):
-        min_one_criteria = True
-        query += keyword_filter(keyword)
-    if not (release_year == None):
-        min_one_criteria = True
-        query += releaseyear_filter(release_year)
+    query += genre_filter(genres)
+    query += keyword_filter(keyword)
+    query += rating_filter(rating_range)
+    query += releaseyear_filter(year_range)
     
-    if min_one_criteria:
-        # Removing 'AND' from query text.
-        query = query[:-4]
-    else:
-        # Removing 'WHERE' from query text.
-        query = query[:-6]
     query += "ORDER BY random() LIMIT 1;"
     print(query)
 
@@ -59,7 +52,6 @@ def pick_random_movie(criteria):
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    
     # Getting 12 random movies with a rating of 8 or higher.
     twelve_rand_query = '''
         SELECT * 
