@@ -20,7 +20,13 @@ def keyword_filter(keyword):
 def releaseyear_filter(year):
     return f"year = {year} AND "
 
-def pick_random_movie(genres, keyword, release_year):
+def releaseyear_filter(year_range):
+    min_year, max_year = year_range
+    return f"(year >= {min_year} AND year <= {max_year}) "
+
+
+def pick_random_movie(criteria):
+    genres, keyword, rating_range, year_range, director, actor = criteria
     query = "SELECT * FROM Movies WHERE "
     min_one_criteria = False
     if not (genres == []):
@@ -69,18 +75,28 @@ def home():
 
     if request.method == 'POST':
         # User has clicked generate so generate random movie.
-        genres_picked = request.form.getlist('genres')
-        keyword = request.form.get('keyword', type=str)
-        release_year = request.form.get('releaseyear', type=int)
+        criteria = get_criteria()
         
         # Saving which genres the user picked.
-        session['genres_picked'] = genres_picked 
+        session['genres_picked'] = criteria[0] 
         # TODO: Should save all criteria specified instead of just genres.
         
-        return pick_random_movie(genres_picked, keyword, release_year)
+        return pick_random_movie(criteria)
 
     genres_picked = session.get('genres_picked', [])
     return render_template('index.html', genres_picked=genres_picked, content=movies, length=length)
+
+def get_criteria():
+    genres = request.form.getlist('genres')
+    keyword = request.form.get('keyword', type=str)
+    rating_range = (request.form.get('min_rating', 0.0, type=float),
+                    request.form.get('max_rating', 10.0, type=float))
+    year_range = (request.form.get('min_year', 1920, type=int), 
+                  request.form.get('max_year', 2020, type=int))
+    director = request.form.get('director', type=str)
+    actor = request.form.get('actor', type=str)
+    
+    return genres, keyword, rating_range, year_range, director, actor
 
 @app.route("/contact")
 def contact():
