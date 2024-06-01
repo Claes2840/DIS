@@ -6,7 +6,7 @@ app = Flask(__name__ , static_url_path='/static')
 db = "dbname='MovieRoulette' user='postgres' host='localhost' password='Lykkehvid123'"
 conn = psycopg2.connect(db)
 
-def genre_filter(genres):
+def filter_genre(genres):
     if not genres:
         return ""
     genre_condition = "("
@@ -14,29 +14,29 @@ def genre_filter(genres):
         genre_condition += f"genres ~* '{genre}' OR "
     return genre_condition[:-4] + ") AND "
 
-def keyword_filter(keyword):
+def filter_keyword(keyword):
     if keyword == "":
         return ""
     # Using (case-insensitive) regexes to find titles.
     return f"(primaryTitle ~* '{keyword}' OR originalTitle ~* '{keyword}') AND "
 
-def rating_filter(rating_range):
+def filter_rating(rating_range):
     min_rating, max_rating = rating_range
     return f"(averageRating >= {min_rating} AND averageRating <= {max_rating}) AND "
 
-def releaseyear_filter(year_range):
+def filter_releaseyear(year_range):
     min_year, max_year = year_range
     return f"(year >= {min_year} AND year <= {max_year}) "
 
 
 def pick_random_movie(criteria):
     genres, keyword, rating_range, year_range, director, actor = criteria
-    query = ("SELECT * FROM Movies WHERE " +
-             genre_filter(genres) +
-             keyword_filter(keyword) +
-             rating_filter(rating_range) +
-             releaseyear_filter(year_range) +
-             "ORDER BY random() LIMIT 1;")
+    query = ("SELECT *\nFROM Movies\nWHERE " +
+             filter_genre(genres) +
+             filter_keyword(keyword) +
+             filter_rating(rating_range) +
+             filter_releaseyear(year_range) +
+             "\nORDER BY random()\nLIMIT 1;")
     print(query)
 
     cur = conn.cursor()
