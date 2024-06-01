@@ -5,7 +5,6 @@ import os
 app = Flask(__name__ , static_url_path='/static')
 db = "dbname='MovieRoulette' user='postgres' host='localhost' password='Lykkehvid123'"
 conn = psycopg2.connect(db)
-cursor = conn.cursor()
 
 def genre_filter(genres):
     if not genres:
@@ -32,18 +31,17 @@ def releaseyear_filter(year_range):
 
 def pick_random_movie(criteria):
     genres, keyword, rating_range, year_range, director, actor = criteria
-    query = "SELECT * FROM Movies WHERE "
-    query += genre_filter(genres)
-    query += keyword_filter(keyword)
-    query += rating_filter(rating_range)
-    query += releaseyear_filter(year_range)
-    
-    query += "ORDER BY random() LIMIT 1;"
+    query = ("SELECT * FROM Movies WHERE " +
+             genre_filter(genres) +
+             keyword_filter(keyword) +
+             rating_filter(rating_range) +
+             releaseyear_filter(year_range) +
+             "ORDER BY random() LIMIT 1;")
     print(query)
 
-    curr = conn.cursor()
-    curr.execute(query)
-    pick = curr.fetchone()
+    cur = conn.cursor()
+    cur.execute(query)
+    pick = cur.fetchone()
     if pick == None:
         # TODO: PRINT TIL BRUGEREN AT DER IKKE FINDES EN FILM.
         return redirect(url_for('home'))
@@ -60,9 +58,9 @@ def home():
         ORDER BY random() 
         LIMIT 12;
     '''
-    curr = conn.cursor()
-    curr.execute(twelve_rand_query)
-    movies = list(curr.fetchall())
+    cur = conn.cursor()
+    cur.execute(twelve_rand_query)
+    movies = list(cur.fetchall())
     length = len(movies)    
 
     if request.method == 'POST':
