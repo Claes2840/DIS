@@ -18,7 +18,7 @@ def filter_keyword(keyword):
     if keyword == "":
         return ""
     # Using (case-insensitive) regexes to find titles.
-    return f"(primaryTitle ~* '{keyword}' OR originalTitle ~* '{keyword}') AND "
+    return f"(primaryTitle ~* '\y{keyword}\y' OR originalTitle ~* '\y{keyword}\y') AND "
 
 def filter_rating(rating_range):
     min_rating, max_rating = rating_range
