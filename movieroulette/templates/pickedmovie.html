@@ -1,11 +1,29 @@
 
 {% extends "navbar.html" %} {% block content %}
     <div class="container">
-        <img src="/static/posters/{{content[0]}}.jpg" alt="Movie" class="imagebig"/>
-        <h1> {{content[2]}}</h1>
+        <div class="image-container">
+            <a href="https://www.imdb.com/title/{{content[0]}}/" target="_blank">
+                <img src="{{content[7]}}" alt="Movie poster" class="imagebig"/>
+            </a>
+        </div>
+        <h1> {{content[2]}}
+            {% if content[2] != content[3] %} 
+                ({{content[3]}}) <!-- Showing original title if it's not the same as primary title. -->
+            {% endif %}
+            
+        </h1>
         <p><strong>Release year:</strong> {{content[1]}}</p>
         <p><strong>Runtime:</strong> {{content[4]}} minutes</p>
-        <p><strong>Genre(s):</strong> {{content[5]}}</p>
+        <p>
+            <strong>
+            {% if ',' in content[5] %}
+                Genres:
+            {% else %}
+                Genre:
+            {% endif %}
+            </strong>
+            {{content[5]}}
+        </p>
         <p><strong>IMDb-rating:</strong> {{content[6]}}</p>
     </div>
 {% endblock content %}

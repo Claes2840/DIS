@@ -1,99 +1,114 @@
-from flask import Flask, render_template, redirect, url_for, session, abort, request, flash
-import requests
-from bs4 import BeautifulSoup
+from flask import Flask, render_template, redirect, url_for, session, request
 import psycopg2
-from flask_bcrypt import Bcrypt
 import os
 
 app = Flask(__name__ , static_url_path='/static')
 db = "dbname='MovieRoulette' user='postgres' host='localhost' password='Lykkehvid123'"
 conn = psycopg2.connect(db)
-cursor = conn.cursor()
 
-def genre_filter(genres):
-    sql = '''('''
+def filter_genre(genres):
+    if not genres:
+        return ""
+    genre_condition = "("
     for genre in genres:
-        sql += f'''genres ~ '{genre}' OR '''
-    return sql[:-3] + ''')'''
+        genre_condition += f"genres ~* '{genre}' OR "
+    return genre_condition[:-4] + ") AND "
 
-def keyword_filter(keyword):
-    return f'''(primarytitle ~ '{keyword}' OR originaltitle ~ '{keyword}') '''
+def filter_keyword(keyword):
+    if keyword == "":
+        return ""
+    # Using (case-insensitive) regexes to find titles.
+    return f"(primaryTitle ~* '\y{keyword}\y' OR originalTitle ~* '\y{keyword}\y') AND "
 
-def releaseyear_filter(year):
-    return f'''(year = {year}) '''
+def filter_rating(rating_range):
+    min_rating, max_rating = rating_range
+    return f"(averageRating >= {min_rating} AND averageRating <= {max_rating}) AND "
+
+def filter_releaseyear(year_range):
+    min_year, max_year = year_range
+    return f"(year >= {min_year} AND year <= {max_year}) "
 
 
-def pick_random_movie(genres, keyword, releaseyear):
-    sqlcode = '''SELECT id FROM MOVIES WHERE '''
-    cond = False
-    if not (genres == []):
-        cond = True
-        sqlcode += genre_filter(genres) + ''' AND '''
-    if not (keyword == ''):
-        cond = True
-        sqlcode += keyword_filter(keyword) + ''' AND '''
-    if not (releaseyear == None):
-        cond = True
-        sqlcode += releaseyear_filter(releaseyear) + ''' AND '''
-    
-    if (cond):
-        sqlcode = sqlcode[:-4]
-    else:
-        sqlcode = sqlcode[:-6]
-    sqlcode += ''' ORDER BY random() LIMIT 1;'''
-    print(sqlcode)
-    curr = conn.cursor()
-    curr.execute(sqlcode)
-    movieid = (curr.fetchone())
-    if (movieid == None):
-        #PRINT TIL BRUGEREN AT DER IKKE FINDES EN FILM
+def pick_random_movie(criteria):
+    genres, keyword, rating_range, year_range, director, actor = criteria
+    query = ("SELECT *\nFROM Movies\nWHERE " +
+             filter_genre(genres) +
+             filter_keyword(keyword) +
+             filter_rating(rating_range) +
+             filter_releaseyear(year_range) +
+             "\nORDER BY random()\nLIMIT 1;")
+    print(query)
+
+    cur = conn.cursor()
+    cur.execute(query)
+    pick = cur.fetchone()
+    if pick == None:
+        # TODO: PRINT TIL BRUGEREN AT DER IKKE FINDES EN FILM.
         return redirect(url_for('home'))
     
-    return redirect(url_for('picked_movie', movieid=movieid[0]))
-
+    return redirect(url_for('picked_movie', movie_id=pick[0]))
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    curr = conn.cursor()
-    # Getting 10 random rows from Movies
-    twelve_rand = '''
-        SELECT * FROM Movies WHERE averageRating >= 8.0 ORDER BY random() LIMIT 12;
+    # Getting 12 random movies with a rating of 8 or higher.
+    twelve_rand_query = '''
+        SELECT * 
+        FROM Movies 
+        WHERE averageRating >= 8.0
+        ORDER BY random() 
+        LIMIT 12;
     '''
-    curr.execute(twelve_rand)
-    movies = list(curr.fetchall())
+    cur = conn.cursor()
+    cur.execute(twelve_rand_query)
+    movies = list(cur.fetchall())
     length = len(movies)    
 
     if request.method == 'POST':
-        selected_options = request.form.getlist('genres')
-        keyword = request.form.get('keyword', type=str)
-        releaseyear = (request.form.get('releaseyear', type=int))
+        # User has clicked generate so generate random movie.
+        criteria = get_criteria()
         
-        session['selected_options'] = selected_options
+        # Saving which genres the user picked.
+        session['genres_picked'] = criteria[0] 
+        # TODO: Should save all criteria specified instead of just genres.
         
-        return pick_random_movie(selected_options, keyword, releaseyear)
-    
-        # return redirect(url_for('home'))
+        return pick_random_movie(criteria)
 
-    selected_options = session.get('selected_options', [])
-    return render_template('index.html', selected_options=selected_options, content=movies, length=length)
+    genres_picked = session.get('genres_picked', [])
+    return render_template('index.html', genres_picked=genres_picked, content=movies, length=length)
+
+def get_criteria():
+    genres = request.form.getlist('genres')
+    keyword = request.form.get('keyword', type=str)
+    rating_range = (request.form.get('min_rating', 0.0, type=float),
+                    request.form.get('max_rating', 10.0, type=float))
+    year_range = (request.form.get('min_year', 1920, type=int), 
+                  request.form.get('max_year', 2024, type=int))
+    director = request.form.get('director', type=str)
+    actor = request.form.get('actor', type=str)
+    
+    return genres, keyword, rating_range, year_range, director, actor
 
 @app.route("/contact")
 def contact():
     return render_template('contact.html')
 
-@app.route("/pickedmovie/<movieid>")
-def picked_movie(movieid):
-    #Tilføj en ekstra knap 'generate' som generere en ny film ud fra de samme kritier
+@app.route("/movie/<movie_id>")
+def picked_movie(movie_id):
+    # TODO: Tilføj en ekstra knap 'generate' som genererer en ny film ud fra de samme kritier
     cur = conn.cursor()
-    pick_movie = f'''SELECT * FROM Movies WHERE id= '{movieid}' '''
-    cur.execute(pick_movie)    
+    movie_query = f'''
+        SELECT *
+        FROM Movies 
+        WHERE id = '{movie_id}'
+    '''
+    cur.execute(movie_query)    
     pick = cur.fetchone()
     
     # Resetting the previously selected options.
-    session['selected_options'] = []
+    session['genres_picked'] = []
     
     return render_template('pickedmovie.html', content=pick)
 
 if __name__ == "__main__":
     app.secret_key = os.urandom(12)
-    app.run(debug=True, port=5003)
+    app.run(debug=True, port=5000)

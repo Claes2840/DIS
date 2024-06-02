@@ -1,182 +1,285 @@
 {% extends "navbar.html" %} {% block content %}
     <h1>Movie Roulette</h1>
-    <h2>Specify some constraints and press 'Generate' to generate a random movie!</h2>
+    <h2>Specify some constraints and press 'Pick' to find a movie!</h2>
 
-    <form method="post" class="filter-container">
-        <div class="filter-container" style="margin-bottom: 0px;">
-            <div class="customCheckBoxHolder">
-                <input type="checkbox" id="cCB1" class="customCheckBoxInput" name="genres" value="Action" {% if 'Action' in selected_options %}checked{% endif %}>
-                <label for="cCB1" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">Action</div>
-                    </div>
-                </label>
-                <input type="checkbox" id="cCB2" class="customCheckBoxInput" name="genres" value="Adventure" {% if 'Adventure' in selected_options %}checked{% endif %}>
-                <label for="cCB2" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">Adventure</div>
-                    </div>
-                </label>
-                <input type="checkbox" id="cCB3" class="customCheckBoxInput" name="genres" value="Comedy" {% if 'Comedy' in selected_options %}checked{% endif %}>
-                <label for="cCB3" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">Comedy</div>
-                    </div>
-                </label>
-                <input type="checkbox" id="cCB4" class="customCheckBoxInput" name="genres" value="Crime" {% if 'Crime' in selected_options %}checked{% endif %}>
-                <label for="cCB4" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">Crime</div>
-                    </div>
-                </label>
-                <input type="checkbox" id="cCB5" class="customCheckBoxInput" name="genres" value="Drama" {% if 'Drama' in selected_options %}checked{% endif %}>
-                <label for="cCB5" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">Drama</div>
-                    </div>
-                </label>
-                <input type="checkbox" id="cCB6" class="customCheckBoxInput" name="genres" value="Horror" {% if 'Horror' in selected_options %}checked{% endif %}>
-                <label for="cCB6" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">Horror</div>
-                    </div>
-                </label>
-                <input type="checkbox" id="cCB7" class="customCheckBoxInput" name="genres" value="Musical" {% if 'Musical' in selected_options %}checked{% endif %}>
-                <label for="cCB7" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">Musical</div>
-                    </div>
-                </label>
-                <input type="checkbox" id="cCB8" class="customCheckBoxInput" name="genres" value="Mystery" {% if 'Mystery' in selected_options %}checked{% endif %}>
-                <label for="cCB8" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">Mystery</div>
-                    </div>
-                </label>
-                <input type="checkbox" id="cCB9" class="customCheckBoxInput" name="genres" value="Romance" {% if 'Romance' in selected_options %}checked{% endif %}>
-                <label for="cCB9" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">Romance</div>
-                    </div>
-                </label>
-                <input type="checkbox" id="cCB10" class="customCheckBoxInput" name="genres" value="Sci-Fi" {% if 'Sci-Fi' in selected_options %}checked{% endif %}>
-                <label for="cCB10" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">Sci-Fi</div>
-                    </div>
-                </label>
-            </div>
-            <div class="customCheckBoxHolder">
-                <input type="checkbox" id="cCB11" class="customCheckBoxInput" name="genres" value="Thriller" {% if 'Thriller' in selected_options %}checked{% endif %}>
-                <label for="cCB11" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">Thriller</div>
-                    </div>
-                </label>
-                <input type="checkbox" id="cCB12" class="customCheckBoxInput" name="genres" value="Animation" {% if 'Animation' in selected_options %}checked{% endif %}>
-                <label for="cCB12" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">Animation</div>
-                    </div>
-                </label>
-                <input type="checkbox" id="cCB13" class="customCheckBoxInput" name="genres" value="Biography" {% if 'Biography' in selected_options %}checked{% endif %}>
-                <label for="cCB13" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">Biography</div>
-                    </div>
-                </label>
-                <input type="checkbox" id="cCB14" class="customCheckBoxInput" name="genres" value="Concert" {% if 'Concert' in selected_options %}checked{% endif %}>
-                <label for="cCB14" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">Concert</div>
-                    </div>
-                </label>
-                <input type="checkbox" id="cCB15" class="customCheckBoxInput" name="genres" value="History" {% if 'History' in selected_options %}checked{% endif %}>
-                <label for="cCB15" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">History</div>
-                    </div>
-                </label>
-                <input type="checkbox" id="cCB16" class="customCheckBoxInput" name="genres" value="Family" {% if 'Family' in selected_options %}checked{% endif %}>
-                <label for="cCB16" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">Family</div>
-                    </div>
-                </label>
-                <input type="checkbox" id="cCB17" class="customCheckBoxInput" name="genres" value="Fantasy" {% if 'Fantasy' in selected_options %}checked{% endif %}>
-                <label for="cCB17" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">Fantasy</div>
-                    </div>
-                </label>
-                <input type="checkbox" id="cCB18" class="customCheckBoxInput" name="genres" value="War" {% if 'War' in selected_options %}checked{% endif %}>
-                <label for="cCB18" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">War</div>
-                    </div>
-                </label>
-                <input type="checkbox" id="cCB19" class="customCheckBoxInput" name="genres" value="Western" {% if 'Western' in selected_options %}checked{% endif %}>
-                <label for="cCB19" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">Western</div>
-                    </div>
-                </label>
-                <input type="checkbox" id="cCB20" class="customCheckBoxInput" name="genres" value="Sport" {% if 'Sport' in selected_options %}checked{% endif %}>
-                <label for="cCB20" class="customCheckBoxWrapper">
-                    <div class="customCheckBox">
-                        <div class="inner">Sport</div>
-                    </div>
-                </label>
-            </div>
-            <!-- <div class="checkbox-container">
-                <label><input type="checkbox" name="genres" value="Action" {% if 'Action' in selected_options %}checked{% endif %}> Action</label>
-                <label><input type="checkbox" name="genres" value="Adventure" {% if 'Adventure' in selected_options %}checked{% endif %}> Adventure</label>
-                <label><input type="checkbox" name="genres" value="Comedy" {% if 'Comedy' in selected_options %}checked{% endif %}> Comedy</label>
-                <label><input type="checkbox" name="genres" value="Crime" {% if 'Crime' in selected_options %}checked{% endif %}> Crime</label>
-                <label><input type="checkbox" name="genres" value="Drama" {% if 'Drama' in selected_options %}checked{% endif %}> Drama</label>
-                <label><input type="checkbox" name="genres" value="Horror" {% if 'Horror' in selected_options %}checked{% endif %}> Horror</label>
-                <label><input type="checkbox" name="genres" value="Musical" {% if 'Musical' in selected_options %}checked{% endif %}> Musical</label>
-                <label><input type="checkbox" name="genres" value="Mystery" {% if 'Mystery' in selected_options %}checked{% endif %}> Mystery</label>
-                <label><input type="checkbox" name="genres" value="Romance" {% if 'Romance' in selected_options %}checked{% endif %}> Romance</label>
-                <label><input type="checkbox" name="genres" value="Sci-Fi" {% if 'Sci-Fi' in selected_options %}checked{% endif %}> Sci-Fi</label>
-                <label><input type="checkbox" name="genres" value="Thriller" {% if 'Thriller' in selected_options %}checked{% endif %}> Thriller</label>
-                <label><input type="checkbox" name="genres" value="Animation" {% if 'Animation' in selected_options %}checked{% endif %}> Animation</label>
-                <label><input type="checkbox" name="genres" value="Biography" {% if 'Biography' in selected_options %}checked{% endif %}> Biography</label>
-                <label><input type="checkbox" name="genres" value="Concert" {% if 'Concert' in selected_options %}checked{% endif %}> Concert</label>
-                <label><input type="checkbox" name="genres" value="History" {% if 'History' in selected_options %}checked{% endif %}> Entertainment</label>
-                <label><input type="checkbox" name="genres" value="Family" {% if 'Family' in selected_options %}checked{% endif %}> Family</label>
-                <label><input type="checkbox" name="genres" value="Fantasy" {% if 'Fantasy' in selected_options %}checked{% endif %}> Fantasy</label>
-                <label><input type="checkbox" name="genres" value="War" {% if 'War' in selected_options %}checked{% endif %}> War</label>
-                <label><input type="checkbox" name="genres" value="Western" {% if 'Western' in selected_options %}checked{% endif %}> Western</label>
-                <label><input type="checkbox" name="genres" value="Sport" {% if 'Sport' in selected_options %}checked{% endif %}> Sport</label>
-            </div> -->
-            <!-- <div>
-                <input type="text" placeholder="Keywords, e.g. &quot;stars&quot;">
-            </div>
-            <div>
-                <input type="number" placeholder="Release year">
-            </div>
-            <div>
-                <button value="generate">Generate</button>
-            </div> -->
+    <form method="post">
+        <div class="filter-container" style="margin-bottom: 0;">
+            <div class="checkbox-container">
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="Action" type="checkbox" name="genres" value="Action" {% if 'Action' in genres_picked %}checked{% endif %}>
+                  <label class="cbx" for="Action"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>Action</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="Adventure" type="checkbox" name="genres" value="Adventure" {% if 'Adventure' in genres_picked %}checked{% endif %}>
+                  <label class="cbx" for="Adventure"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>Adventure</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="Comedy" type="checkbox" name="genres" value="Comedy" {% if 'Comedy' in genres_picked %}checked{% endif %}>>
+                  <label class="cbx" for="Comedy"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>Comedy</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="Crime" type="checkbox" name="genres" value="Crime" {% if 'Crime' in genres_picked %}checked{% endif %}>>
+                  <label class="cbx" for="Crime"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>Crime</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="Drama" type="checkbox" name="genres" value="Drama" {% if 'Drama' in genres_picked %}checked{% endif %}>>
+                  <label class="cbx" for="Drama"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>Drama</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="Horror" type="checkbox" name="genres" value="Horror" {% if 'Horror' in genres_picked %}checked{% endif %}>>
+                  <label class="cbx" for="Horror"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>Horror</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="Musical" type="checkbox" name="genres" value="Musical" {% if 'Musical' in genres_picked %}checked{% endif %}>>
+                  <label class="cbx" for="Musical"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>Musical</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="Mystery" type="checkbox" name="genres" value="Mystery" {% if 'Mystery' in genres_picked %}checked{% endif %}>>
+                  <label class="cbx" for="Mystery"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>Mystery</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="Romance" type="checkbox" name="genres" value="Romance" {% if 'Romance' in genres_picked %}checked{% endif %}>>
+                  <label class="cbx" for="Romance"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>Romance</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="Sci-Fi" type="checkbox" name="genres" value="Sci-Fi" {% if 'Sci-Fi' in genres_picked %}checked{% endif %}>>
+                  <label class="cbx" for="Sci-Fi"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>Sci-Fi</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+          </div>
+          <div class="checkbox-container">
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="Thriller" type="checkbox" name="genres" value="Thriller" {% if 'Thriller' in genres_picked %}checked{% endif %}>>
+                  <label class="cbx" for="Thriller"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>Thriller</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="Animation" type="checkbox" name="genres" value="Animation" {% if 'Animation' in genres_picked %}checked{% endif %}>>
+                  <label class="cbx" for="Animation"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>Animation</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="Biography" type="checkbox" name="genres" value="Biography" {% if 'Biography' in genres_picked %}checked{% endif %}>>
+                  <label class="cbx" for="Biography"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>Biography</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="History" type="checkbox" name="genres" value="History" {% if 'History' in genres_picked %}checked{% endif %}>>
+                  <label class="cbx" for="History"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>History</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="Family" type="checkbox" name="genres" value="Family" {% if 'Family' in genres_picked %}checked{% endif %}>>
+                  <label class="cbx" for="Family"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>Family</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="Fantasy" type="checkbox" name="genres" value="Fantasy" {% if 'Fantasy' in genres_picked %}checked{% endif %}>>
+                  <label class="cbx" for="Fantasy"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>Fantasy</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="War" type="checkbox" name="genres" value="War" {% if 'War' in genres_picked %}checked{% endif %}>>
+                  <label class="cbx" for="War"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>War</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="Western" type="checkbox" name="genres" value="Western" {% if 'Western' in genres_picked %}checked{% endif %}>>
+                  <label class="cbx" for="Western"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>Western</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+              <div class="checkbox-wrapper-4">
+                  <input class="inp-cbx" id="Sport" type="checkbox" name="genres" value="Sport" {% if 'Sport' in genres_picked %}checked{% endif %}>>
+                  <label class="cbx" for="Sport"><span>
+                  <svg width="12px" height="10px">
+                  
+                  </svg></span><span>Sport</span></label>
+                  <svg class="inline-svg">
+                  <symbol id="check-4" viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </symbol>
+                  </svg>
+              </div>
+          </div>
             <div class="input-bar-container">
-                <input type="text" class="input-bar" placeholder="Keyword, e.g. &quot;stars&quot;" name="keyword">
-                <input type="number" class="input-bar" placeholder="Release year"name="releaseyear">
+                <div class="coolinput">
+                    <label for="input" class="text">Keyword:</label>
+                    <input type="text" placeholder="E.g. &quot;Shrek&quot; or &quot;star&quot;" name="keyword" class="input">
+                </div>
+                <div class="coolinput">
+                    <label for="input" class="text">Director:</label>
+                    <input type="text" placeholder="E.g. &quot;Greta Gerwig&quot;" name="director" class="input">
+                </div>
+                <div class="coolinput">
+                    <label for="input" class="text">Actor:</label>
+                    <input type="text" placeholder="E.g. &quot;DiCaprio&quot;" name="actor" class="input">
+                </div>
             </div>
-            <div class="sp">
-
+            <div class="range-container">
+              <div class="range-wrapper">
+                <h4>Rating (min-max)</h4>
+                <div class="inner-range-wrapper">
+                  <input class="input-style" placeholder="0" type="number" name="min_rating">
+                  <p>-</p>
+                  <input class="input-style" placeholder="10" type="number" name="max_rating">
+                </div>
+              </div>
+              <div class="range-wrapper">
+                <h4>Release year (min-max)</h4>
+                <div class="inner-range-wrapper">
+                  <input class="input-style" placeholder="1920" type="number" name="min_year" style="width: 38px;">
+                  <p>-</p>
+                  <input class="input-style" placeholder="2020" type="number" name="max_year" style="width: 38px;">
+                </div>
+              </div>
+            </div>
+            <div class="sp" style="margin-top: 30px;margin-bottom: 30px;">
                 <button value="generate" class="sparkle-button">
                   <span class="spark"></span>
-                  
                   <span class="backdrop"></span>
                   <svg class="sparkle" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M14.187 8.096L15 5.25L15.813 8.096C16.0231 8.83114 16.4171 9.50062 16.9577 10.0413C17.4984 10.5819 18.1679 10.9759 18.903 11.186L21.75 12L18.904 12.813C18.1689 13.0231 17.4994 13.4171 16.9587 13.9577C16.4181 14.4984 16.0241 15.1679 15.814 15.903L15 18.75L14.187 15.904C13.9769 15.1689 13.5829 14.4994 13.0423 13.9587C12.5016 13.4181 11.8321 13.0241 11.097 12.814L8.25 12L11.096 11.187C11.8311 10.9769 12.5006 10.5829 13.0413 10.0423C13.5819 9.50162 13.9759 8.83214 14.186 8.097L14.187 8.096Z" fill="black" stroke="black" stroke-linecap="round" stroke-linejoin="round"></path>
                     <path d="M6 14.25L5.741 15.285C5.59267 15.8785 5.28579 16.4206 4.85319 16.8532C4.42059 17.2858 3.87853 17.5927 3.285 17.741L2.25 18L3.285 18.259C3.87853 18.4073 4.42059 18.7142 4.85319 19.1468C5.28579 19.5794 5.59267 20.1215 5.741 20.715L6 21.75L6.259 20.715C6.40725 20.1216 6.71398 19.5796 7.14639 19.147C7.5788 18.7144 8.12065 18.4075 8.714 18.259L9.75 18L8.714 17.741C8.12065 17.5925 7.5788 17.2856 7.14639 16.853C6.71398 16.4204 6.40725 15.8784 6.259 15.285L6 14.25Z" fill="black" stroke="black" stroke-linecap="round" stroke-linejoin="round"></path>
                     <path d="M6.5 4L6.303 4.5915C6.24777 4.75718 6.15472 4.90774 6.03123 5.03123C5.90774 5.15472 5.75718 5.24777 5.5915 5.303L5 5.5L5.5915 5.697C5.75718 5.75223 5.90774 5.84528 6.03123 5.96877C6.15472 6.09226 6.24777 6.24282 6.303 6.4085L6.5 7L6.697 6.4085C6.75223 6.24282 6.84528 6.09226 6.96877 5.96877C7.09226 5.84528 7.24282 5.75223 7.4085 5.697L8 5.5L7.4085 5.303C7.24282 5.24777 7.09226 5.15472 6.96877 5.03123C6.84528 4.90774 6.75223 4.75718 6.697 4.5915L6.5 4Z" fill="black" stroke="black" stroke-linecap="round" stroke-linejoin="round"></path>
                   </svg>
-                  <span class="text">Generate</span>
+                  <span class="text">Pick</span>
                 </button>
-                <div class="bodydrop"></div>
+              <div class="bodydrop"></div>
                 <span aria-hidden="true" class="particle-pen">
                   <svg class="particle" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6.937 3.846L7.75 1L8.563 3.846C8.77313 4.58114 9.1671 5.25062 9.70774 5.79126C10.2484 6.3319 10.9179 6.72587 11.653 6.936L14.5 7.75L11.654 8.563C10.9189 8.77313 10.2494 9.1671 9.70874 9.70774C9.1681 10.2484 8.77413 10.9179 8.564 11.653L7.75 14.5L6.937 11.654C6.72687 10.9189 6.3329 10.2494 5.79226 9.70874C5.25162 9.1681 4.58214 8.77413 3.847 8.564L1 7.75L3.846 6.937C4.58114 6.72687 5.25062 6.3329 5.79126 5.79226C6.3319 5.25162 6.72587 4.58214 6.936 3.847L6.937 3.846Z" fill="black" stroke="black" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -231,14 +334,15 @@
                   </svg>
                 </span>
               </div>
-        </div>
+            </div>
     </form>
+    <h2>Some movies with an IMDb-rating of 8.0 or higher:</h2>
     <div class="cards">
         {%for i in range(0, length)%}
-        <a href="/pickedmovie/{{content[i][0]}}">
+        <a href="/movie/{{content[i][0]}}">
           <div class="card">
             <img
-              src="/static/posters/{{content[i][0]}}.jpg"
+              src="{{content[i][7]}}"
               alt="Avatar"
               class="image"
             />
@@ -246,7 +350,14 @@
               <h3 class="movietitle"><b>{{content[i][2]}}</b></h4>
               <p class="card-text">Release year: {{content[i][1]}}</p>
               <p class="card-text">Average rating: {{content[i][6]}}</p>
-              <p class="card-text">Genre(s): {{content[i][5]}}</p>
+              <p class="card-text">
+                {% if ',' in content[i][5] %}
+                  Genres:
+                {% else %}
+                  Genre:
+                {% endif %}
+                {{content[i][5]}}
+              </p>
             </div>
           </div>
         </a>
