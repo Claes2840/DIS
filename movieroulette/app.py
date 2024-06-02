@@ -82,7 +82,7 @@ def get_criteria():
     rating_range = (request.form.get('min_rating', 0.0, type=float),
                     request.form.get('max_rating', 10.0, type=float))
     year_range = (request.form.get('min_year', 1920, type=int), 
-                  request.form.get('max_year', 2020, type=int))
+                  request.form.get('max_year', 2024, type=int))
     director = request.form.get('director', type=str)
     actor = request.form.get('actor', type=str)
     
