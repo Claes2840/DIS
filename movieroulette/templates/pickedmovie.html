@@ -3,13 +3,27 @@
     <div class="container">
         <div class="image-container">
             <a href="https://www.imdb.com/title/{{content[0]}}/" target="_blank">
-                <img src="{{content[5]}}" alt="Movie poster" class="imagebig"/>
+                <img src="{{content[7]}}" alt="Movie poster" class="imagebig"/>
             </a>
         </div>
-        <h1> {{content[2]}}</h1>
+        <h1> {{content[2]}}
+            {% if content[2] != content[3] %} 
+                ({{content[3]}}) <!-- Showing original title if it's not the same as primary title. -->
+            {% endif %}
+            
+        </h1>
         <p><strong>Release year:</strong> {{content[1]}}</p>
-        <p><strong>Runtime:</strong> {{content[2]}} minutes</p>
-        <p><strong>Genre(s):</strong> {{content[3]}}</p>
-        <p><strong>IMDb-rating:</strong> {{content[4]}}</p>
+        <p><strong>Runtime:</strong> {{content[4]}} minutes</p>
+        <p>
+            <strong>
+            {% if ',' in content[5] %}
+                Genres:
+            {% else %}
+                Genre:
+            {% endif %}
+            </strong>
+            {{content[5]}}
+        </p>
+        <p><strong>IMDb-rating:</strong> {{content[6]}}</p>
     </div>
 {% endblock content %}

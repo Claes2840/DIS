@@ -350,7 +350,14 @@
               <h3 class="movietitle"><b>{{content[i][2]}}</b></h4>
               <p class="card-text">Release year: {{content[i][1]}}</p>
               <p class="card-text">Average rating: {{content[i][6]}}</p>
-              <p class="card-text">Genre(s): {{content[i][5]}}</p>
+              <p class="card-text">
+                {% if ',' in content[i][5] %}
+                  Genres:
+                {% else %}
+                  Genre:
+                {% endif %}
+                {{content[i][5]}}
+              </p>
             </div>
           </div>
         </a>
