@@ -14,7 +14,7 @@ CREATE TABLE Movies(
     PRIMARY KEY (id)
 );
 COPY Movies(id,year,primaryTitle,originalTitle,runtimeMinutes,genres,averageRating,posterURL)
-    FROM '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/imdb_movie_list.csv'
+    FROM '/Users/claes/DIS/Afleveringer/DIS/movieroulette/tmp/imdb_movie_list.csv'
     delimiter ','
     CSV HEADER;
 
@@ -26,7 +26,7 @@ CREATE TABLE Directors(
     PRIMARY KEY (did)
 );
 COPY Directors(did, primaryName)
-    FROM '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/directors.csv'
+    FROM '/Users/claes/DIS/Afleveringer/DIS/movieroulette/tmp/directors.csv'
     delimiter ','
     CSV HEADER;
 
@@ -38,6 +38,6 @@ CREATE TABLE Actors(
     PRIMARY KEY (aid)
 );
 COPY Actors(aid, primaryName)
-    FROM '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/actors.csv'
+    FROM '/Users/claes/DIS/Afleveringer/DIS/movieroulette/tmp/actors.csv'
     delimiter ','
     CSV HEADER;
