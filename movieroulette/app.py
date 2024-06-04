@@ -9,44 +9,45 @@ conn = psycopg2.connect(db)
 def filter_genre(genres):
     if not genres:
         return ""
-    genre_condition = "("
+    genre_conditions = f'''\n    id IN (SELECT mid
+           FROM MovieGenreAssociations M
+           JOIN Genres G
+           ON M.genre = G.genre AND ('''
     for genre in genres:
-        genre_condition += f"genres ~* '{genre}' OR "
-    return genre_condition[:-4] + ") AND "
+        genre_conditions += f"G.genre = '{genre}' OR "
+    return genre_conditions[:-4] + "))\n    AND "
+
+def filter_director(director_name):
+    if director_name == "":
+        return ""
+    subquery = f'''(SELECT mid 
+           FROM Directs
+           JOIN Directors
+           ON Directs.did = Directors.did AND primaryName ~* '\y{director_name}\y')'''
+    return f'''\n    id IN {subquery}\n    AND '''
+
+def filter_actor(actor_name):
+    if actor_name == "":
+        return ""
+    subquery = f'''(SELECT mid 
+           FROM StarsIn S
+           JOIN Actors A
+           ON S.aid = A.aid AND primaryName ~* '\y{actor_name}\y')'''
+    return f'''\n    id IN {subquery}\n    AND '''
 
 def filter_keyword(keyword):
     if keyword == "":
         return ""
     # Using (case-insensitive) regexes to find titles.
-    return f"(primaryTitle ~* '\y{keyword}\y' OR originalTitle ~* '\y{keyword}\y') AND "
+    return f"(primaryTitle ~* '\y{keyword}\y' OR originalTitle ~* '\y{keyword}\y') \n    AND "
 
 def filter_rating(rating_range):
     min_rating, max_rating = rating_range
-    return f"(averageRating >= {min_rating} AND averageRating <= {max_rating}) AND "
+    return f"(averageRating >= {min_rating} AND averageRating <= {max_rating}) \n    AND "
 
 def filter_releaseyear(year_range):
     min_year, max_year = year_range
-    return f"(year >= {min_year} AND year <= {max_year}) "
-
-def filter_director(director):
-    if director == "":
-        return ""
-    return f'''(id in (
-            SELECT DIRECTS.mid
-            FROM DIRECTORS 
-            JOIN DIRECTS
-            ON DIRECTORS.primaryName ~* '\y{director}\y' 
-            AND DIRECTS.did = DIRECTORS.did)) AND '''
-
-def filter_actor(actor):
-    if actor == "":
-        return ""
-    return f'''(id in (
-            SELECT STARSIN.mid
-            FROM ACTORS 
-            JOIN STARSIN
-            ON ACTORS.primaryName ~* '\y{actor}\y' 
-            AND STARSIN.aid = ACTORS.aid)) AND '''
+    return f"(year >= {min_year} AND year <= {max_year})\n"
             
 def filter_character(character):
     if character == "":
@@ -64,7 +65,7 @@ def pick_random_movie(criteria):
              filter_character(character) +
              filter_rating(rating_range) +
              filter_releaseyear(year_range) +
-             "\nORDER BY random()\nLIMIT 1;")
+             "ORDER BY random()\nLIMIT 1;")
     print(query)
 
     cur = conn.cursor()
