@@ -28,12 +28,33 @@ def filter_releaseyear(year_range):
     min_year, max_year = year_range
     return f"(year >= {min_year} AND year <= {max_year}) "
 
+def filter_director(director):
+    if director == "":
+        return ""
+    return f'''(id in (
+            SELECT DIRECTS.mid
+            FROM DIRECTORS 
+            JOIN DIRECTS
+            ON DIRECTORS.primaryName ~* '\y{director}\y' 
+            AND DIRECTS.did = DIRECTORS.did)) AND '''
+
+def filter_actor(actor):
+    if actor == "":
+        return ""
+    return f'''(id in (
+            SELECT STARSIN.mid
+            FROM ACTORS 
+            JOIN STARSIN
+            ON ACTORS.primaryName ~* '\y{actor}\y' 
+            AND STARSIN.aid = ACTORS.aid)) AND '''
 
 def pick_random_movie(criteria):
     genres, keyword, rating_range, year_range, director, actor = criteria
     query = ("SELECT *\nFROM Movies\nWHERE " +
              filter_genre(genres) +
              filter_keyword(keyword) +
+             filter_director(director) +
+             filter_actor(actor) +
              filter_rating(rating_range) +
              filter_releaseyear(year_range) +
              "\nORDER BY random()\nLIMIT 1;")
@@ -43,8 +64,7 @@ def pick_random_movie(criteria):
     cur.execute(query)
     pick = cur.fetchone()
     if pick == None:
-        # TODO: PRINT TIL BRUGEREN AT DER IKKE FINDES EN FILM.
-        return redirect(url_for('home'))
+        return redirect(url_for('badcritiera'))
     
     return redirect(url_for('picked_movie', movie_id=pick[0]))
 
@@ -95,6 +115,12 @@ def get_criteria():
 def contact():
     return render_template('contact.html')
 
+@app.route("/badcritiera", methods=['GET','POST'])
+def badcritiera():
+    if request.method == 'POST':
+        return redirect(url_for('home'))
+    return render_template('badcritiera.html')
+
 @app.route("/movie/<movie_id>", methods=['GET','POST'])
 def picked_movie(movie_id):
     if request.method == 'POST':
@@ -108,9 +134,6 @@ def picked_movie(movie_id):
     '''
     cur.execute(movie_query)    
     pick = cur.fetchone()
-    
-    # Resetting the previously selected options.
-    # session['genres_picked'] = []
     
     return render_template('pickedmovie.html', content=pick)
 
