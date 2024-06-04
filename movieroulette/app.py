@@ -47,14 +47,21 @@ def filter_actor(actor):
             JOIN STARSIN
             ON ACTORS.primaryName ~* '\y{actor}\y' 
             AND STARSIN.aid = ACTORS.aid)) AND '''
+            
+def filter_character(character):
+    if character == "":
+        return ""
+    return f'''(id in (SELECT mid FROM STARSIN
+                WHERE charactername ~* '\y{character}')) AND '''
 
 def pick_random_movie(criteria):
-    genres, keyword, rating_range, year_range, director, actor = criteria
+    genres, keyword, rating_range, year_range, director, actor, character = criteria
     query = ("SELECT *\nFROM Movies\nWHERE " +
              filter_genre(genres) +
              filter_keyword(keyword) +
              filter_director(director) +
              filter_actor(actor) +
+             filter_character(character) +
              filter_rating(rating_range) +
              filter_releaseyear(year_range) +
              "\nORDER BY random()\nLIMIT 1;")
@@ -65,7 +72,6 @@ def pick_random_movie(criteria):
     pick = cur.fetchone()
     if pick == None:
         return redirect(url_for('badcritiera'))
-    
     return redirect(url_for('picked_movie', movie_id=pick[0]))
 
 @app.route("/", methods=['GET', 'POST'])
@@ -108,8 +114,9 @@ def get_criteria():
                   request.form.get('max_year', 2024, type=int))
     director = request.form.get('director', type=str)
     actor = request.form.get('actor', type=str)
+    character = request.form.get('character', type=str)
     
-    return genres, keyword, rating_range, year_range, director, actor
+    return genres, keyword, rating_range, year_range, director, actor, character
 
 @app.route("/contact")
 def contact():
