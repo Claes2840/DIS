@@ -50,6 +50,9 @@ def pick_random_movie(criteria):
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
+    # Resetting criteria
+    session['criteria'] = []
+    
     # Getting 12 random movies with a rating of 7 or higher.
     twelve_rand_query = '''
         SELECT * 
@@ -68,13 +71,13 @@ def home():
         criteria = get_criteria()
         
         # Saving which genres the user picked.
-        session['genres_picked'] = criteria[0] 
-        # TODO: Should save all criteria specified instead of just genres.
+        session['criteria'] = criteria
         
+        # TODO: Should save all criteria specified instead of just genres.
         return pick_random_movie(criteria)
 
-    genres_picked = session.get('genres_picked', [])
-    return render_template('index.html', genres_picked=genres_picked, content=movies, length=length)
+    criteria = session.get('criteria', [])
+    return render_template('index.html', criteria=criteria, content=movies, length=length)
 
 def get_criteria():
     genres = request.form.getlist('genres')
@@ -92,9 +95,11 @@ def get_criteria():
 def contact():
     return render_template('contact.html')
 
-@app.route("/movie/<movie_id>")
+@app.route("/movie/<movie_id>", methods=['GET','POST'])
 def picked_movie(movie_id):
-    # TODO: Tilføj en ekstra knap 'generate' som genererer en ny film ud fra de samme kritier
+    if request.method == 'POST':
+        return pick_random_movie(session.get('criteria', []))
+    
     cur = conn.cursor()
     movie_query = f'''
         SELECT *
@@ -105,7 +110,7 @@ def picked_movie(movie_id):
     pick = cur.fetchone()
     
     # Resetting the previously selected options.
-    session['genres_picked'] = []
+    # session['genres_picked'] = []
     
     return render_template('pickedmovie.html', content=pick)
 
