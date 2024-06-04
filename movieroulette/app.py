@@ -3,7 +3,7 @@ import psycopg2
 import os
 
 app = Flask(__name__ , static_url_path='/static')
-db = "dbname='MovieRoulette' user='postgres' host='localhost' password='Lykkehvid123'"
+db = "dbname='MovieRoulette' user='postgres' host='localhost' password='dis'"
 conn = psycopg2.connect(db)
 
 def filter_genre(genres):
@@ -52,8 +52,9 @@ def filter_releaseyear(year_range):
 def filter_character(character):
     if character == "":
         return ""
-    return f'''(id in (SELECT mid FROM STARSIN
-                WHERE charactername ~* '\y{character}')) AND '''
+    return f'''\n    id in (SELECT mid 
+           FROM StarsIn
+           WHERE charactername ~* '\y{character}')\n    AND '''
 
 def pick_random_movie(criteria):
     genres, keyword, rating_range, year_range, director, actor, character = criteria
@@ -72,13 +73,16 @@ def pick_random_movie(criteria):
     cur.execute(query)
     pick = cur.fetchone()
     if pick == None:
-        return redirect(url_for('badcritiera'))
+        return redirect(url_for('bad_criteria'))
     return redirect(url_for('picked_movie', movie_id=pick[0]))
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    # Resetting criteria
-    session['criteria'] = []
+    reset_criteria = request.args.get('reset_criteria', True)
+    criteria = session.get('criteria', [])
+    if reset_criteria:
+        # Resetting criteria.
+        session['criteria'] = []
     
     # Getting 12 random movies with a rating of 7 or higher.
     twelve_rand_query = '''
@@ -97,13 +101,10 @@ def home():
         # User has clicked generate so generate random movie.
         criteria = get_criteria()
         
-        # Saving which genres the user picked.
+        # Saving the user-specified criteria.
         session['criteria'] = criteria
         
-        # TODO: Should save all criteria specified instead of just genres.
         return pick_random_movie(criteria)
-
-    criteria = session.get('criteria', [])
     return render_template('index.html', criteria=criteria, content=movies, length=length)
 
 def get_criteria():
@@ -123,16 +124,20 @@ def get_criteria():
 def contact():
     return render_template('contact.html')
 
-@app.route("/badcritiera", methods=['GET','POST'])
-def badcritiera():
+@app.route("/bad_criteria", methods=['GET','POST'])
+def bad_criteria():
     if request.method == 'POST':
         return redirect(url_for('home'))
-    return render_template('badcritiera.html')
+    return render_template('bad_criteria.html')
 
 @app.route("/movie/<movie_id>", methods=['GET','POST'])
 def picked_movie(movie_id):
     if request.method == 'POST':
-        return pick_random_movie(session.get('criteria', []))
+        pressed = request.form
+        if 'new_pick' in pressed:
+            return pick_random_movie(session.get('criteria', []))
+        elif 'new_criteria' in pressed:
+            return redirect(url_for('home', reset_criteria=False))
     
     cur = conn.cursor()
     movie_query = f'''
