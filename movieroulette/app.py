@@ -9,34 +9,56 @@ conn = psycopg2.connect(db)
 def filter_genre(genres):
     if not genres:
         return ""
-    genre_condition = "("
+    genre_conditions = f'''\n    id IN (SELECT mid
+           FROM MovieGenreAssociations M
+           JOIN Genres G
+           ON M.genre = G.genre AND ('''
     for genre in genres:
-        genre_condition += f"genres ~* '{genre}' OR "
-    return genre_condition[:-4] + ") AND "
+        genre_conditions += f"G.genre = '{genre}' OR "
+    return genre_conditions[:-4] + "))\n    AND "
+
+def filter_director(director_name):
+    if director_name == "":
+        return ""
+    subquery = f'''(SELECT mid 
+           FROM Directs
+           JOIN Directors
+           ON Directs.did = Directors.did AND primaryName ~* '\y{director_name}\y')'''
+    return f'''\n    id IN {subquery}\n    AND '''
+
+def filter_actor(actor_name):
+    if actor_name == "":
+        return ""
+    subquery = f'''(SELECT mid 
+           FROM StarsIn S
+           JOIN Actors A
+           ON S.aid = A.aid AND primaryName ~* '\y{actor_name}\y')'''
+    return f'''\n    id IN {subquery}\n    AND '''
 
 def filter_keyword(keyword):
     if keyword == "":
         return ""
     # Using (case-insensitive) regexes to find titles.
-    return f"(primaryTitle ~* '\y{keyword}\y' OR originalTitle ~* '\y{keyword}\y') AND "
+    return f"(primaryTitle ~* '\y{keyword}\y' OR originalTitle ~* '\y{keyword}\y') \n    AND "
 
 def filter_rating(rating_range):
     min_rating, max_rating = rating_range
-    return f"(averageRating >= {min_rating} AND averageRating <= {max_rating}) AND "
+    return f"(averageRating >= {min_rating} AND averageRating <= {max_rating}) \n    AND "
 
 def filter_releaseyear(year_range):
     min_year, max_year = year_range
-    return f"(year >= {min_year} AND year <= {max_year}) "
-
+    return f"(year >= {min_year} AND year <= {max_year})\n"
 
 def pick_random_movie(criteria):
     genres, keyword, rating_range, year_range, director, actor = criteria
     query = ("SELECT *\nFROM Movies\nWHERE " +
              filter_genre(genres) +
              filter_keyword(keyword) +
+             filter_director(director) +
+             filter_actor(actor) +
              filter_rating(rating_range) +
              filter_releaseyear(year_range) +
-             "\nORDER BY random()\nLIMIT 1;")
+             "ORDER BY random()\nLIMIT 1;")
     print(query)
 
     cur = conn.cursor()
@@ -44,7 +66,7 @@ def pick_random_movie(criteria):
     pick = cur.fetchone()
     if pick == None:
         # TODO: PRINT TIL BRUGEREN AT DER IKKE FINDES EN FILM.
-        return redirect(url_for('home'))
+        return redirect(url_for('bad_criteria'))
     
     return redirect(url_for('picked_movie', movie_id=pick[0]))
 
