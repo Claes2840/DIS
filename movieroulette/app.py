@@ -50,11 +50,11 @@ def pick_random_movie(criteria):
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    # Getting 12 random movies with a rating of 8 or higher.
+    # Getting 12 random movies with a rating of 7 or higher.
     twelve_rand_query = '''
         SELECT * 
         FROM Movies 
-        WHERE averageRating >= 8.0
+        WHERE averageRating >= 7.0
         ORDER BY random() 
         LIMIT 12;
     '''
