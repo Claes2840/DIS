@@ -48,14 +48,21 @@ def filter_rating(rating_range):
 def filter_releaseyear(year_range):
     min_year, max_year = year_range
     return f"(year >= {min_year} AND year <= {max_year})\n"
+            
+def filter_character(character):
+    if character == "":
+        return ""
+    return f'''(id in (SELECT mid FROM STARSIN
+                WHERE charactername ~* '\y{character}')) AND '''
 
 def pick_random_movie(criteria):
-    genres, keyword, rating_range, year_range, director, actor = criteria
+    genres, keyword, rating_range, year_range, director, actor, character = criteria
     query = ("SELECT *\nFROM Movies\nWHERE " +
              filter_genre(genres) +
              filter_keyword(keyword) +
              filter_director(director) +
              filter_actor(actor) +
+             filter_character(character) +
              filter_rating(rating_range) +
              filter_releaseyear(year_range) +
              "ORDER BY random()\nLIMIT 1;")
@@ -65,13 +72,14 @@ def pick_random_movie(criteria):
     cur.execute(query)
     pick = cur.fetchone()
     if pick == None:
-        # TODO: PRINT TIL BRUGEREN AT DER IKKE FINDES EN FILM.
-        return redirect(url_for('bad_criteria'))
-    
+        return redirect(url_for('badcritiera'))
     return redirect(url_for('picked_movie', movie_id=pick[0]))
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
+    # Resetting criteria
+    session['criteria'] = []
+    
     # Getting 12 random movies with a rating of 7 or higher.
     twelve_rand_query = '''
         SELECT * 
@@ -90,13 +98,13 @@ def home():
         criteria = get_criteria()
         
         # Saving which genres the user picked.
-        session['genres_picked'] = criteria[0] 
-        # TODO: Should save all criteria specified instead of just genres.
+        session['criteria'] = criteria
         
+        # TODO: Should save all criteria specified instead of just genres.
         return pick_random_movie(criteria)
 
-    genres_picked = session.get('genres_picked', [])
-    return render_template('index.html', genres_picked=genres_picked, content=movies, length=length)
+    criteria = session.get('criteria', [])
+    return render_template('index.html', criteria=criteria, content=movies, length=length)
 
 def get_criteria():
     genres = request.form.getlist('genres')
@@ -107,16 +115,25 @@ def get_criteria():
                   request.form.get('max_year', 2024, type=int))
     director = request.form.get('director', type=str)
     actor = request.form.get('actor', type=str)
+    character = request.form.get('character', type=str)
     
-    return genres, keyword, rating_range, year_range, director, actor
+    return genres, keyword, rating_range, year_range, director, actor, character
 
 @app.route("/contact")
 def contact():
     return render_template('contact.html')
 
-@app.route("/movie/<movie_id>")
+@app.route("/badcritiera", methods=['GET','POST'])
+def badcritiera():
+    if request.method == 'POST':
+        return redirect(url_for('home'))
+    return render_template('badcritiera.html')
+
+@app.route("/movie/<movie_id>", methods=['GET','POST'])
 def picked_movie(movie_id):
-    # TODO: Tilføj en ekstra knap 'generate' som genererer en ny film ud fra de samme kritier
+    if request.method == 'POST':
+        return pick_random_movie(session.get('criteria', []))
+    
     cur = conn.cursor()
     movie_query = f'''
         SELECT *
@@ -125,9 +142,6 @@ def picked_movie(movie_id):
     '''
     cur.execute(movie_query)    
     pick = cur.fetchone()
-    
-    # Resetting the previously selected options.
-    session['genres_picked'] = []
     
     return render_template('pickedmovie.html', content=pick)
 
