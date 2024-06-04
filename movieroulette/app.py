@@ -57,29 +57,32 @@ def filter_character(character):
            WHERE charactername ~* '\y{character}')\n    AND '''
 
 def pick_random_movie(criteria):
-    genres, keyword, rating_range, year_range, director, actor, character = criteria
-    query = ("SELECT *\nFROM Movies\nWHERE " +
-             filter_genre(genres) +
-             filter_keyword(keyword) +
-             filter_director(director) +
-             filter_actor(actor) +
-             filter_character(character) +
-             filter_rating(rating_range) +
-             filter_releaseyear(year_range) +
-             "ORDER BY random()\nLIMIT 1;")
+    if criteria:
+        genres, keyword, rating_range, year_range, director, actor, character = criteria
+        query = ("SELECT *\nFROM Movies\nWHERE " +
+                filter_genre(genres) +
+                filter_keyword(keyword) +
+                filter_director(director) +
+                filter_actor(actor) +
+                filter_character(character) +
+                filter_rating(rating_range) +
+                filter_releaseyear(year_range) +
+                "ORDER BY random()\nLIMIT 1;")
+    else:
+        query = "SELECT *\nFROM Movies\nORDER BY random()\nLIMIT 1;"
     print(query)
-
     cur = conn.cursor()
     cur.execute(query)
     pick = cur.fetchone()
     if pick == None:
         return redirect(url_for('bad_criteria'))
     return redirect(url_for('picked_movie', movie_id=pick[0]))
+        
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
     reset_criteria = request.args.get('reset_criteria', True)
-    criteria = session.get('criteria', [])
+    criteria = session.get('criteria')
     if reset_criteria:
         # Resetting criteria.
         session['criteria'] = []
@@ -135,7 +138,7 @@ def picked_movie(movie_id):
     if request.method == 'POST':
         pressed = request.form
         if 'new_pick' in pressed:
-            return pick_random_movie(session.get('criteria', []))
+            return pick_random_movie(session.get('criteria'))
         elif 'new_criteria' in pressed:
             return redirect(url_for('home', reset_criteria=False))
     
