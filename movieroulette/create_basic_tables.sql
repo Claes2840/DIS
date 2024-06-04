@@ -11,9 +11,10 @@ CREATE TABLE Movies(
     genres varchar(60),
     averageRating float,
     posterURL varchar(255),
+    originCountries varchar(1024),
     PRIMARY KEY (id)
 );
-COPY Movies(id,year,primaryTitle,originalTitle,runtimeMinutes,genres,averageRating,posterURL)
+COPY Movies(id,year,primaryTitle,originalTitle,runtimeMinutes,genres,averageRating,posterURL,originCountries)
     FROM '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/imdb_movie_list.csv'
     delimiter ','
     CSV HEADER;
@@ -41,3 +42,32 @@ COPY Actors(aid, primaryName)
     FROM '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/actors.csv'
     delimiter ','
     CSV HEADER;
+
+DROP TABLE IF EXISTS Genres;
+CREATE TABLE Genres(
+    genre varchar(11),
+    PRIMARY KEY (genre));
+INSERT INTO Genres VALUES
+    ('Action'),
+    ('Adventure'),
+    ('Comedy'),
+    ('Crime'),
+    ('Drama'),
+    ('Documentary'),
+    ('Horror'),
+    ('Musical'),
+    ('Mystery'),
+    ('News'),
+    ('Romance'),
+    ('Sci-Fi'),
+    ('Thriller'),
+    ('Animation'),
+    ('Biography'),
+    ('History'),
+    ('Family'),
+    ('Film-Noir'),
+    ('Fantasy'),
+    ('Music'),
+    ('War'),
+    ('Western'),
+    ('Sport');
