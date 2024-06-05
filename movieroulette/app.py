@@ -67,26 +67,30 @@ def pick_random_movie(criteria):
                 filter_character(character) +
                 filter_rating(rating_range) +
                 filter_releaseyear(year_range) +
-                "ORDER BY random()\nLIMIT 1;")
+                "ORDER BY random();")
     else:
-        query = "SELECT *\nFROM Movies\nORDER BY random()\nLIMIT 1;"
+        query = "SELECT *\nFROM Movies\nORDER BY random();"
     print(query)
     cur = conn.cursor()
     cur.execute(query)
-    pick = cur.fetchone()
-    if pick == None:
+    picks = cur.fetchall()
+    if not picks:
         return redirect(url_for('bad_criteria'))
-    return redirect(url_for('picked_movie', movie_id=pick[0]))
+    session['picked_movies'] = picks
+    return redirect(url_for('picked_movie', movie_id=picks[0][0]))
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
     reset_criteria = not request.args.get('reset_criteria', True) == 'False'
-    
     if reset_criteria:
         # Resetting criteria.
         session['criteria'] = []
-    session['reset_criteria'] = True
     criteria = session.get('criteria')
+    
+    # Clearing data that might've been saved earlier.
+    session['reset_criteria'] = True
+    session['picked_movies'] = []
+    session['pick'] = None
     
     # Getting 12 random movies with a rating of 7 or higher.
     twelve_rand_query = '''
@@ -135,25 +139,39 @@ def bad_criteria():
     return render_template('bad_criteria.html')
 
 @app.route("/movie/<movie_id>", methods=['GET','POST'])
-def picked_movie(movie_id):
+def picked_movie(movie_id):    
     if request.method == 'POST':
         pressed = request.form
-        if 'new_pick' in pressed:
-            return pick_random_movie(session.get('criteria'))
+        movies = session.get('picked_movies', [])
+        
+        # Checking if user has clicked 'Pick another' and if there are
+        # more movies to choose from given the specified criteria.
+        if 'new_pick' in pressed and movies:
+            # User has clicked 'Pick another' and there  
+            # are other movies to pick based on criteria.
+            i = session.get('i', 0)
+            i = (i + 1) % len(movies)
+            session['i'] = i
+            return render_template('pickedmovie.html', content=movies[i])
         elif 'new_criteria' in pressed:
+            # User wants to specify new criteria.
             return redirect(url_for('home', reset_criteria=False))
     
-    cur = conn.cursor()
-    movie_query = f'''
-        SELECT *
-        FROM Movies 
-        WHERE id = '{movie_id}'
-    '''
-    cur.execute(movie_query)    
-    pick = cur.fetchone()
+    # Avoiding doing more than one query by saving the pick.
+    pick = session.get('pick')
+    if not pick:
+        cur = conn.cursor()
+        movie_query = f'''
+            SELECT *
+            FROM Movies 
+            WHERE id = '{movie_id}'
+        '''
+        cur.execute(movie_query)    
+        pick = cur.fetchone()
+        session['pick'] = pick
     
     return render_template('pickedmovie.html', content=pick)
 
 if __name__ == "__main__":
     app.secret_key = os.urandom(12)
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5004)
