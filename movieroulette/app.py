@@ -77,15 +77,16 @@ def pick_random_movie(criteria):
     if pick == None:
         return redirect(url_for('bad_criteria'))
     return redirect(url_for('picked_movie', movie_id=pick[0]))
-        
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    reset_criteria = request.args.get('reset_criteria', True)
-    criteria = session.get('criteria')
+    reset_criteria = not request.args.get('reset_criteria', True) == 'False'
+    
     if reset_criteria:
         # Resetting criteria.
         session['criteria'] = []
+    session['reset_criteria'] = True
+    criteria = session.get('criteria')
     
     # Getting 12 random movies with a rating of 7 or higher.
     twelve_rand_query = '''
@@ -101,7 +102,7 @@ def home():
     length = len(movies)    
 
     if request.method == 'POST':
-        # User has clicked generate so generate random movie.
+        # User has clicked 'Pick' so pick random movie.
         criteria = get_criteria()
         
         # Saving the user-specified criteria.
@@ -130,7 +131,7 @@ def contact():
 @app.route("/bad_criteria", methods=['GET','POST'])
 def bad_criteria():
     if request.method == 'POST':
-        return redirect(url_for('home'))
+        return redirect(url_for('home', reset_criteria=False))
     return render_template('bad_criteria.html')
 
 @app.route("/movie/<movie_id>", methods=['GET','POST'])

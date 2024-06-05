@@ -38,7 +38,6 @@ p strong {
   color: #555;
 }
 
-/* Add some styling to the strong elements */
 p strong {
   color: #007bff;
 }
@@ -205,7 +204,8 @@ h4.movietitle {
 p.card-text {
   font-size: 0.6em;
   color: #ffffff;
-  text-decoration: none; /* Ensure no underline */
+  text-decoration: none;
+  text-align: left;
 }
 
 .contact {
@@ -243,6 +243,7 @@ p.card-text {
   height: 281px;
   width: 190px;  
   image-rendering: optimizeQuality;
+  vertical-align: top;
 }
 
 .imagebig {
@@ -286,7 +287,7 @@ p.card-text {
 .card-container {
   background-color: #000000;
   padding: 2px 16px;
-  height: 146px;
+  height: 150px;
 }
 
 .customCheckBoxHolder {
@@ -791,3 +792,34 @@ p.card-text {
   transform: rotate(45deg);
 }
 
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+  z-index: 1;
+}
+
+.dropdown-content input {
+  margin-right: 10px;
+}
+
+.dropdown-content label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.dropdown-content label:last-child {
+  margin-bottom: 0;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
