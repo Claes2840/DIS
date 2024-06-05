@@ -1,10 +1,19 @@
 from flask import Flask, render_template, redirect, url_for, session, request
+from flask_caching import Cache
 import psycopg2
 import os
 
 app = Flask(__name__ , static_url_path='/static')
 db = "dbname='MovieRoulette' user='postgres' host='localhost' password='dis'"
 conn = psycopg2.connect(db)
+
+config = {
+    "DEBUG": True,          
+    "CACHE_TYPE": "SimpleCache",
+    "CACHE_DEFAULT_TIMEOUT": 600 # 10 minutes.
+}
+app.config.from_mapping(config)
+cache = Cache(app)
 
 def filter_genre(genres):
     if not genres:
@@ -76,7 +85,7 @@ def pick_random_movie(criteria):
     picks = cur.fetchall()
     if not picks:
         return redirect(url_for('bad_criteria'))
-    session['picked_movies'] = picks
+    cache.set('picked_movies', picks)
     return redirect(url_for('picked_movie', movie_id=picks[0][0]))
 
 @app.route("/", methods=['GET', 'POST'])
@@ -89,8 +98,8 @@ def home():
     
     # Clearing data that might've been saved earlier.
     session['reset_criteria'] = True
-    session['picked_movies'] = []
     session['pick'] = None
+    cache.set('picked_movies', [])
     
     # Getting 12 random movies with a rating of 7 or higher.
     twelve_rand_query = '''
@@ -142,7 +151,7 @@ def bad_criteria():
 def picked_movie(movie_id):    
     if request.method == 'POST':
         pressed = request.form
-        movies = session.get('picked_movies', [])
+        movies = cache.get('picked_movies')
         
         # Checking if user has clicked 'Pick another' and if there are
         # more movies to choose from given the specified criteria.
