@@ -182,7 +182,7 @@ def picked_movie(movie_id):
             session['i'] = i
             return render_template('pickedmovie.html', content=movies[i])
         elif 'new_criteria' in pressed:
-            # User wants to specify new criteria.
+            # User wants to update their criteria.
             return redirect(url_for('home', reset_criteria=False))
     
     # Avoiding doing more than one query by saving the pick.
