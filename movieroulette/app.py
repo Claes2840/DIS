@@ -65,7 +65,7 @@ def filter_character(character):
            FROM StarsIn
            WHERE charactername ~* '\y{character}')\n    AND '''
 
-def pick_random_movie(criteria):
+def pick_random_movies(criteria):
     if criteria:
         genres, keyword, rating_range, year_range, director, actor, character = criteria
         query = ("SELECT *\nFROM Movies\nWHERE " +
@@ -121,7 +121,7 @@ def home():
         # Saving the user-specified criteria.
         session['criteria'] = criteria
         
-        return pick_random_movie(criteria)
+        return pick_random_movies(criteria)
     return render_template('index.html', criteria=criteria, content=movies, length=length)
 
 def get_criteria():
