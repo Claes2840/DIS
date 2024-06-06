@@ -8,18 +8,16 @@ DROP TABLE IF EXISTS MovieCountryAssociations;
 DROP TABLE IF EXISTS Movies;
 CREATE TABLE Movies(
     id varchar(10),
-    year int,
+    releaseYear int,
     primaryTitle varchar(255),
     originalTitle varchar(255),
     runtimeMinutes int, 
-    genres varchar(60),
     averageRating float,
     posterURL varchar(255),
-    originCountries varchar(1024),
     PRIMARY KEY (id)
 );
-COPY Movies(id,year,primaryTitle,originalTitle,runtimeMinutes,genres,averageRating,posterURL,originCountries)
-    FROM '/Users/claes/DIS/Afleveringer/DIS/movieroulette/tmp/imdb_movie_list.csv'
+COPY Movies(id,releaseYear,primaryTitle,originalTitle,runtimeMinutes,averageRating,posterURL)
+    FROM '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/movies.csv'
     delimiter ','
     CSV HEADER;
 
@@ -31,7 +29,7 @@ CREATE TABLE Directors(
     PRIMARY KEY (did)
 );
 COPY Directors(did, primaryName)
-    FROM '/Users/claes/DIS/Afleveringer/DIS/movieroulette/tmp/directors.csv'
+    FROM '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/directors.csv'
     delimiter ','
     CSV HEADER;
 
@@ -43,7 +41,7 @@ CREATE TABLE Actors(
     PRIMARY KEY (aid)
 );
 COPY Actors(aid, primaryName)
-    FROM '/Users/claes/DIS/Afleveringer/DIS/movieroulette/tmp/actors.csv'
+    FROM '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/actors.csv'
     delimiter ','
     CSV HEADER;
 
