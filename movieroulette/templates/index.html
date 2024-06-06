@@ -343,25 +343,25 @@
     </form>
     <h2>Some movies with an IMDb-rating of 7.0 or higher:</h2>
     <div class="cards">
-        {% for i in range(0, length) %}
+        {% for i in range(0, content|length) %}
         <a href="/movie/{{content[i][0]}}">
           <div class="card">
             <img
-              src="{{content[i][7]}}"
+              src="{{content[i][6]}}"
               alt="Avatar"
               class="image"
             />
             <div class="card-container">
               <h3 class="movietitle"><b>{{content[i][2]}}</b></h4>
               <p class="card-text">Release year: {{content[i][1]}}</p>
-              <p class="card-text">Average rating: {{content[i][6]}}</p>
+              <p class="card-text">Average rating: {{content[i][5]}}</p>
               <p class="card-text">
-                {% if ',' in content[i][5] %}
+                {% if ',' in genres[i] %}
                   Genres:
                 {% else %}
                   Genre:
                 {% endif %}
-                {{content[i][5]}}
+                {{ genres[i] }}
               </p>
             </div>
           </div>
