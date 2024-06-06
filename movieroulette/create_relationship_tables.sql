@@ -40,4 +40,17 @@ COPY MovieGenreAssociations(mid, genre)
     delimiter ','
     CSV HEADER;
 
+DROP TABLE IF EXISTS MovieCountryAssociations;
+CREATE TABLE MovieCountryAssociations(
+    mid varchar(10),
+    country varchar(32),
+    PRIMARY KEY (mid, country),
+    FOREIGN KEY (mid) REFERENCES Movies,
+    FOREIGN KEY (country) REFERENCES Countries
+);
+COPY MovieCountryAssociations(mid, country)
+    FROM '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/movie_country_associations.csv'
+    delimiter ','
+    CSV HEADER;
+
 COMMIT;
