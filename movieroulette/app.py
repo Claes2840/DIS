@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, session, request
+from flask import Flask, render_template, redirect, url_for, session, request, Response
 from flask_caching import Cache
 import psycopg2
 import os
@@ -15,7 +15,7 @@ config = {
 app.config.from_mapping(config)
 cache = Cache(app)
 
-def filter_genre(genres):
+def filter_genre(genres: list[str]) -> str:
     if not genres:
         return ""
     genre_conditions = f'''\n    id IN (SELECT mid
@@ -26,7 +26,7 @@ def filter_genre(genres):
         genre_conditions += f"G.genre = '{genre}' OR "
     return genre_conditions[:-4] + "))\n    AND "
 
-def filter_director(director_name):
+def filter_director(director_name: str) -> str:
     if director_name == "":
         return ""
     subquery = f'''(SELECT mid 
@@ -35,7 +35,7 @@ def filter_director(director_name):
            ON Directs.did = Directors.did AND primaryName ~* '\y{director_name}\y')'''
     return f'''\n    id IN {subquery}\n    AND '''
 
-def filter_actor(actor_name):
+def filter_actor(actor_name: str) -> str:
     if actor_name == "":
         return ""
     subquery = f'''(SELECT mid 
@@ -44,28 +44,28 @@ def filter_actor(actor_name):
            ON S.aid = A.aid AND primaryName ~* '\y{actor_name}\y')'''
     return f'''\n    id IN {subquery}\n    AND '''
 
-def filter_keyword(keyword):
+def filter_keyword(keyword: str) -> str:
     if keyword == "":
         return ""
     # Using (case-insensitive) regexes to find titles.
     return f"(primaryTitle ~* '\y{keyword}\y' OR originalTitle ~* '\y{keyword}\y') \n    AND "
 
-def filter_rating(rating_range):
+def filter_rating(rating_range: tuple[float, float]) -> str:
     min_rating, max_rating = rating_range
     return f"(averageRating >= {min_rating} AND averageRating <= {max_rating}) \n    AND "
 
-def filter_releaseyear(year_range):
+def filter_releaseyear(year_range: tuple[int, int]) -> str:
     min_year, max_year = year_range
-    return f"(year >= {min_year} AND year <= {max_year})\n"
+    return f"(releaseYear >= {min_year} AND releaseYear <= {max_year})\n"
             
-def filter_character(character):
+def filter_character(character: str) -> str:
     if character == "":
         return ""
     return f'''\n    id in (SELECT mid 
            FROM StarsIn
            WHERE charactername ~* '\y{character}')\n    AND '''
 
-def pick_random_movies(criteria):
+def pick_random_movies(criteria: list) -> Response:
     if criteria:
         genres, keyword, rating_range, year_range, director, actor, character = criteria
         query = ("SELECT *\nFROM Movies\nWHERE " +
@@ -87,29 +87,25 @@ def pick_random_movies(criteria):
         return redirect(url_for('bad_criteria'))
     cache.set('picked_movies', picks)
     
-    # genres = [[] for _ in range(len(picks))]
-    # countries = [[] for _ in range(len(picks))]
-    # for i, movie in enumerate(picks):
-    #     genres[i] = get_genres(movie[0])
-    #     countries[i] = get_origin_countries(movie[0])
-    
     return redirect(url_for('picked_movie', movie_id=picks[0][0]))
 
-def get_genres(movie_id):
+def get_genres(movie_id: str) -> str:
     query = f"SELECT genre\nFROM MovieGenreAssociations\nWHERE mid = '{movie_id}'"
     cur = conn.cursor()
     cur.execute(query)    
-    return cur.fetchall()
+    genres = ', '.join(map(lambda elm: elm[0], cur.fetchall()))
+    return genres
 
-def get_origin_countries(movie_id):
+def get_origin_countries(movie_id: str) -> str:
     query = f"SELECT country\nFROM MovieCountryAssociations\nWHERE mid = '{movie_id}'"
     cur = conn.cursor()
     cur.execute(query)
-    return cur.fetchall()
+    countries = ', '.join(map(lambda elm: elm[0], cur.fetchall()))
+    return countries
 
 @app.route("/", methods=['GET', 'POST'])
-def home():
-    reset_criteria = not request.args.get('reset_criteria', True) == 'False'
+def home() -> Response | str:
+    reset_criteria = session.get('reset_criteria', True)
     if reset_criteria:
         # Resetting criteria.
         session['criteria'] = []
@@ -118,6 +114,7 @@ def home():
     # Clearing data that might've been saved earlier.
     session['reset_criteria'] = True
     session['pick'] = None
+    session['i'] = 0
     cache.set('picked_movies', [])
     
     # Getting 12 random movies with a rating of 7 or higher.
@@ -130,8 +127,13 @@ def home():
     '''
     cur = conn.cursor()
     cur.execute(twelve_rand_query)
-    movies = list(cur.fetchall())
-    length = len(movies)    
+    movies = cur.fetchall()
+    
+    genres = ['' for _ in range(len(movies))]
+    countries = ['' for _ in range(len(movies))]
+    for i, movie in enumerate(movies):
+        genres[i] = get_genres(movie[0])
+        countries[i] = get_origin_countries(movie[0])
 
     if request.method == 'POST':
         # User has clicked 'Pick' so pick random movie.
@@ -141,9 +143,9 @@ def home():
         session['criteria'] = criteria
         
         return pick_random_movies(criteria)
-    return render_template('index.html', criteria=criteria, content=movies, length=length)
+    return render_template('index.html', criteria=criteria, content=movies, genres=genres)
 
-def get_criteria():
+def get_criteria() -> tuple:
     genres = request.form.getlist('genres')
     keyword = request.form.get('keyword', type=str)
     rating_range = (request.form.get('min_rating', 0.0, type=float),
@@ -157,17 +159,17 @@ def get_criteria():
     return genres, keyword, rating_range, year_range, director, actor, character
 
 @app.route("/contact")
-def contact():
+def contact() -> str:
     return render_template('contact.html')
 
 @app.route("/bad_criteria", methods=['GET','POST'])
-def bad_criteria():
+def bad_criteria() -> Response | str:
     if request.method == 'POST':
         return redirect(url_for('home', reset_criteria=False))
     return render_template('bad_criteria.html')
 
 @app.route("/movie/<movie_id>", methods=['GET','POST'])
-def picked_movie(movie_id):    
+def picked_movie(movie_id: str) -> Response | str:    
     if request.method == 'POST':
         pressed = request.form
         movies = cache.get('picked_movies')
@@ -180,26 +182,29 @@ def picked_movie(movie_id):
             i = session.get('i', 0)
             i = (i + 1) % len(movies)
             session['i'] = i
-            return render_template('pickedmovie.html', content=movies[i])
+            genres = get_genres(movies[i][0])
+            countries = get_origin_countries(movies[i][0])
+            return render_template(
+                'pickedmovie.html', content=movies[i], genres=genres, countries=countries)
         elif 'new_criteria' in pressed:
-            # User wants to specify new criteria.
-            return redirect(url_for('home', reset_criteria=False))
+            # User wants to update their criteria.
+            session['reset_criteria'] = False
+            return redirect(url_for('home'))
     
-    # Avoiding doing more than one query by saving the pick.
-    pick = session.get('pick')
-    if not pick:
-        cur = conn.cursor()
-        movie_query = f'''
-            SELECT *
-            FROM Movies 
-            WHERE id = '{movie_id}'
-        '''
-        cur.execute(movie_query)    
-        pick = cur.fetchone()
-        session['pick'] = pick
+    cur = conn.cursor()
+    movie_query = f'''
+        SELECT *
+        FROM Movies
+        WHERE id = '{movie_id}'
+    '''
+    cur.execute(movie_query)    
+    pick = cur.fetchone()
+    genres = get_genres(movie_id)
+    countries = get_origin_countries(movie_id)
     
-    return render_template('pickedmovie.html', content=pick)
+    return render_template(
+        'pickedmovie.html', content=pick, genres=genres, countries=countries)
 
 if __name__ == "__main__":
     app.secret_key = os.urandom(12)
-    app.run(debug=True, port=5004)
+    app.run(debug=True, port=5000)

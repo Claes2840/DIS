@@ -1,5 +1,9 @@
 DROP TABLE IF EXISTS StarsIn;
 DROP TABLE IF EXISTS Directs;
+DROP TABLE IF EXISTS MovieGenreAssociations;
+DROP TABLE IF EXISTS MovieCountryAssociations;
+
+-- Jacobs path: '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/'
 
 DROP TABLE IF EXISTS Movies;
 CREATE TABLE Movies(
@@ -48,30 +52,29 @@ CREATE TABLE Genres(
     genre varchar(11),
     PRIMARY KEY (genre));
 INSERT INTO Genres VALUES
-    ('Crime'),
-    ('Music'),
-    ('Horror'),
-    ('genre'),
-    ('Animation'),
-    ('Thriller'),
-    ('Fantasy'),
-    ('Sci-Fi'),
-    ('Western'),
-    ('Family'),
-    ('Biography'),
-    ('News'),
-    ('Musical'),
-    ('Romance'),
-    ('Documentary'),
-    ('Sport'),
-    ('Mystery'),
-    ('Comedy'),
-    ('Adventure'),
-    ('Drama'),
-    ('War'),
     ('Action'),
-    ('Film-Noir'),
+    ('Adventure'),
+    ('Comedy'),
+    ('Crime'),
+    ('Drama'),
+    ('Horror'),
+    ('Musical'),
+    ('Mystery'),
+    ('Romance'),
+    ('Sci-Fi'),
+    ('Thriller'),
+    ('Animation'),
+    ('Biography'),
     ('History');
+    ('Family'),
+    ('Fantasy'),
+    ('War'),
+    ('Western'),
+    ('Sport'),
+    ('Music'),
+    ('News'),
+    ('Documentary'),
+    ('Film-Noir'),
 
 DROP TABLE IF EXISTS Countries;
 CREATE TABLE Countries(
