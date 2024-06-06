@@ -1,5 +1,9 @@
 DROP TABLE IF EXISTS StarsIn;
 DROP TABLE IF EXISTS Directs;
+DROP TABLE IF EXISTS MovieGenreAssociations;
+DROP TABLE IF EXISTS MovieCountryAssociations;
+
+-- Jacobs path: '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/'
 
 DROP TABLE IF EXISTS Movies;
 CREATE TABLE Movies(

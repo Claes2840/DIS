@@ -1,3 +1,5 @@
+-- Jacobs path: '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/'
+
 START TRANSACTION;
 
 DROP TABLE IF EXISTS StarsIn;
