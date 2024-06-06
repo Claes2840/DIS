@@ -86,7 +86,26 @@ def pick_random_movies(criteria):
     if not picks:
         return redirect(url_for('bad_criteria'))
     cache.set('picked_movies', picks)
+    
+    # genres = [[] for _ in range(len(picks))]
+    # countries = [[] for _ in range(len(picks))]
+    # for i, movie in enumerate(picks):
+    #     genres[i] = get_genres(movie[0])
+    #     countries[i] = get_origin_countries(movie[0])
+    
     return redirect(url_for('picked_movie', movie_id=picks[0][0]))
+
+def get_genres(movie_id):
+    query = f"SELECT genre\nFROM MovieGenreAssociations\nWHERE mid = '{movie_id}'"
+    cur = conn.cursor()
+    cur.execute(query)    
+    return cur.fetchall()
+
+def get_origin_countries(movie_id):
+    query = f"SELECT country\nFROM MovieCountryAssociations\nWHERE mid = '{movie_id}'"
+    cur = conn.cursor()
+    cur.execute(query)
+    return cur.fetchall()
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
