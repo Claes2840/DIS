@@ -97,7 +97,7 @@ def get_genres(movie_id: str) -> str:
     return genres
 
 def get_origin_countries(movie_id: str) -> str:
-    query = f"SELECT country\nFROM MovieCountryAssociations\nWHERE mid = '{movie_id}'"
+    query = f"SELECT country\nFROM OriginCountries\nWHERE mid = '{movie_id}'"
     cur = conn.cursor()
     cur.execute(query)
     countries = ', '.join(map(lambda elm: elm[0], cur.fetchall()))
