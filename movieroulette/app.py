@@ -65,7 +65,7 @@ def filter_character(character: str) -> str:
            FROM StarsIn
            WHERE charactername ~* '\y{character}')\n    AND '''
 
-def pick_random_movies(criteria: list) -> Response:
+def pick_random_movies(criteria: tuple) -> Response:
     if criteria:
         genres, keyword, rating_range, year_range, director, actor, character = criteria
         query = ("SELECT *\nFROM Movies\nWHERE " +
@@ -97,7 +97,7 @@ def get_genres(movie_id: str) -> str:
     return genres
 
 def get_origin_countries(movie_id: str) -> str:
-    query = f"SELECT country\nFROM MovieCountryAssociations\nWHERE mid = '{movie_id}'"
+    query = f"SELECT country\nFROM OriginCountries\nWHERE mid = '{movie_id}'"
     cur = conn.cursor()
     cur.execute(query)
     countries = ', '.join(map(lambda elm: elm[0], cur.fetchall()))
@@ -165,7 +165,8 @@ def contact() -> str:
 @app.route("/bad_criteria", methods=['GET','POST'])
 def bad_criteria() -> Response | str:
     if request.method == 'POST':
-        return redirect(url_for('home', reset_criteria=False))
+        session['reset_criteria'] = False
+        return redirect(url_for('home'))
     return render_template('bad_criteria.html')
 
 @app.route("/movie/<movie_id>", methods=['GET','POST'])

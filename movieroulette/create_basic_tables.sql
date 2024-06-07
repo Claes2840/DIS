@@ -63,7 +63,7 @@ INSERT INTO Genres VALUES
     ('Thriller'),
     ('Animation'),
     ('Biography'),
-    ('History');
+    ('History'),
     ('Family'),
     ('Fantasy'),
     ('War'),
@@ -72,7 +72,7 @@ INSERT INTO Genres VALUES
     ('Music'),
     ('News'),
     ('Documentary'),
-    ('Film-Noir'),
+    ('Film-Noir');
 
 DROP TABLE IF EXISTS Countries;
 CREATE TABLE Countries(

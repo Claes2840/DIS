@@ -12,7 +12,7 @@ CREATE TABLE StarsIn(
     FOREIGN KEY (aid) REFERENCES Actors
 );
 COPY StarsIn(mid, aid, characterName)
-    FROM '/Users/claes/DIS/Afleveringer/DIS/movieroulette/tmp/stars_in.csv'
+    FROM '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/stars_in.csv'
     delimiter ','
     CSV HEADER;
 
@@ -25,7 +25,7 @@ CREATE TABLE Directs(
     FOREIGN KEY (did) REFERENCES Directors    
 );
 COPY Directs(mid, did)
-    FROM '/Users/claes/DIS/Afleveringer/DIS/movieroulette/tmp/directs.csv'
+    FROM '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/directs.csv'
     delimiter ','
     CSV HEADER;
 
@@ -42,15 +42,15 @@ COPY MovieGenreAssociations(mid, genre)
     delimiter ','
     CSV HEADER;
 
-DROP TABLE IF EXISTS MovieCountryAssociations;
-CREATE TABLE MovieCountryAssociations(
+DROP TABLE IF EXISTS OriginCountries;
+CREATE TABLE OriginCountries(
     mid varchar(10),
     country varchar(32),
     PRIMARY KEY (mid, country),
     FOREIGN KEY (mid) REFERENCES Movies,
     FOREIGN KEY (country) REFERENCES Countries
 );
-COPY MovieCountryAssociations(mid, country)
+COPY OriginCountries(mid, country)
     FROM '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/movie_country_associations.csv'
     delimiter ','
     CSV HEADER;
