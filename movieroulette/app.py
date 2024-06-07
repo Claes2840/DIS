@@ -65,7 +65,7 @@ def filter_character(character: str) -> str:
            FROM StarsIn
            WHERE charactername ~* '\y{character}')\n    AND '''
 
-def pick_random_movies(criteria: list) -> Response:
+def pick_random_movies(criteria: tuple) -> Response:
     if criteria:
         genres, keyword, rating_range, year_range, director, actor, character = criteria
         query = ("SELECT *\nFROM Movies\nWHERE " +
