@@ -306,9 +306,9 @@
               <div class="range-wrapper">
                 <h4>Rating (min-max)</h4>
                 <div class="inner-range-wrapper">
-                  <input class="input-style" placeholder="0" type="number" step="0.1" style="width: 29.2px;" name="min_rating" value={% if criteria[2] and criteria[2][0] != 0%} "{{criteria[2][0]}}" {% endif %}>
+                  <input class="input-style" placeholder="0.0" type="number" step="0.1" style="width: 29.2px;" name="min_rating" value={% if criteria[2] and criteria[2][0] != 0%} "{{criteria[2][0]}}" {% endif %}>
                   <p>-</p>
-                  <input class="input-style" placeholder="10" type="number" step="0.1" style="width: 29.2px;" name="max_rating" value={% if criteria[2] and criteria[2][1] != 10%} "{{criteria[2][1]}}" {% endif %}>
+                  <input class="input-style" placeholder="10.0" type="number" step="0.1" style="width: 29.2px;" name="max_rating" value={% if criteria[2] and criteria[2][1] != 10%} "{{criteria[2][1]}}" {% endif %}>
                 </div>
               </div>
               <div class="range-wrapper">
