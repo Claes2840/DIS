@@ -165,7 +165,8 @@ def contact() -> str:
 @app.route("/bad_criteria", methods=['GET','POST'])
 def bad_criteria() -> Response | str:
     if request.method == 'POST':
-        return redirect(url_for('home', reset_criteria=False))
+        session['reset_criteria'] = False
+        return redirect(url_for('home'))
     return render_template('bad_criteria.html')
 
 @app.route("/movie/<movie_id>", methods=['GET','POST'])
