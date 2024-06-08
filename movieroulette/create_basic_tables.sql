@@ -1,9 +1,7 @@
 DROP TABLE IF EXISTS StarsIn;
 DROP TABLE IF EXISTS Directs;
 DROP TABLE IF EXISTS MovieGenreAssociations;
-DROP TABLE IF EXISTS MovieCountryAssociations;
-
--- Jacobs path: '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/'
+DROP TABLE IF EXISTS OriginCountries;
 
 DROP TABLE IF EXISTS Movies;
 CREATE TABLE Movies(
@@ -17,7 +15,7 @@ CREATE TABLE Movies(
     PRIMARY KEY (id)
 );
 COPY Movies(id,releaseYear,primaryTitle,originalTitle,runtimeMinutes,averageRating,posterURL)
-    FROM '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/movies.csv'
+    FROM 'path/to/tmp/movies.csv'
     delimiter ','
     CSV HEADER;
 
@@ -29,7 +27,7 @@ CREATE TABLE Directors(
     PRIMARY KEY (did)
 );
 COPY Directors(did, primaryName)
-    FROM '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/directors.csv'
+    FROM 'path/to/tmp/directors.csv'
     delimiter ','
     CSV HEADER;
 
@@ -41,7 +39,7 @@ CREATE TABLE Actors(
     PRIMARY KEY (aid)
 );
 COPY Actors(aid, primaryName)
-    FROM '/Users/jacobsiegumfeldt/Desktop/DIS/Project/movieroulette/tmp/actors.csv'
+    FROM 'path/to/tmp/actors.csv'
     delimiter ','
     CSV HEADER;
 
@@ -95,7 +93,6 @@ INSERT INTO Countries VALUES
     ('Ghana'),
     ('Colombia'),
     ('Cuba'),
-    ('nan'),
     ('Kazakhstan'),
     ('Austria'),
     ('Iran'),
@@ -187,7 +184,6 @@ INSERT INTO Countries VALUES
     ('Peru'),
     ('India'),
     ('Bahamas'),
-    ('genre'),
     ('Belgium'),
     ('West Germany'),
     ('Argentina'),
