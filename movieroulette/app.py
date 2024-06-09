@@ -57,6 +57,10 @@ def filter_rating(rating_range: tuple[float, float]) -> str:
 def filter_releaseyear(year_range: tuple[int, int]) -> str:
     min_year, max_year = year_range
     return f"(releaseYear >= {min_year} AND releaseYear <= {max_year})\n"
+
+def filter_runtime(runtime_range: int) -> str:
+    min_runtime, max_runtime = runtime_range
+    return f"(runtimeMinutes >= {min_runtime} AND runtimeMinutes <= {max_runtime}) \n    AND "
             
 def filter_character(character: str) -> str:
     if character == "":
@@ -67,13 +71,14 @@ def filter_character(character: str) -> str:
 
 def pick_random_movies(criteria: tuple) -> Response:
     if criteria:
-        genres, keyword, rating_range, year_range, director, actor, character = criteria
+        genres, keyword, rating_range, year_range, director, actor, character, runtime_range = criteria
         query = ("SELECT *\nFROM Movies\nWHERE " +
                 filter_genre(genres) +
                 filter_keyword(keyword) +
                 filter_director(director) +
                 filter_actor(actor) +
                 filter_character(character) +
+                filter_runtime(runtime_range) +
                 filter_rating(rating_range) +
                 filter_releaseyear(year_range) +
                 "ORDER BY random();")
@@ -105,14 +110,13 @@ def get_origin_countries(movie_id: str) -> str:
 
 @app.route("/", methods=['GET', 'POST'])
 def home() -> Response | str:
-    reset_criteria = session.get('reset_criteria', True)
-    if reset_criteria:
+    reset_criteria = request.args.get('reset_criteria', True)
+    if not reset_criteria == 'False':
         # Resetting criteria.
         session['criteria'] = []
     criteria = session.get('criteria')
     
     # Clearing data that might've been saved earlier.
-    session['reset_criteria'] = True
     session['pick'] = None
     session['i'] = 0
     cache.set('picked_movies', [])
@@ -155,8 +159,10 @@ def get_criteria() -> tuple:
     director = request.form.get('director', type=str)
     actor = request.form.get('actor', type=str)
     character = request.form.get('character', type=str)
+    runtime_range = (request.form.get('min_runtime', 0, type=int),
+                     request.form.get('max_runtime', 467, type=int))
     
-    return genres, keyword, rating_range, year_range, director, actor, character
+    return genres, keyword, rating_range, year_range, director, actor, character, runtime_range
 
 @app.route("/contact")
 def contact() -> str:
@@ -165,8 +171,7 @@ def contact() -> str:
 @app.route("/bad_criteria", methods=['GET','POST'])
 def bad_criteria() -> Response | str:
     if request.method == 'POST':
-        session['reset_criteria'] = False
-        return redirect(url_for('home'))
+        return redirect(url_for('home', reset_criteria=False))
     return render_template('bad_criteria.html')
 
 @app.route("/movie/<movie_id>", methods=['GET','POST'])
@@ -183,14 +188,10 @@ def picked_movie(movie_id: str) -> Response | str:
             i = session.get('i', 0)
             i = (i + 1) % len(movies)
             session['i'] = i
-            genres = get_genres(movies[i][0])
-            countries = get_origin_countries(movies[i][0])
-            return render_template(
-                'pickedmovie.html', content=movies[i], genres=genres, countries=countries)
+            return redirect(url_for('picked_movie', movie_id=movies[i][0]))
         elif 'new_criteria' in pressed:
             # User wants to update their criteria.
-            session['reset_criteria'] = False
-            return redirect(url_for('home'))
+            return redirect(url_for('home', reset_criteria=False))
     
     cur = conn.cursor()
     movie_query = f'''
