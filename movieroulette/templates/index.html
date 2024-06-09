@@ -319,6 +319,14 @@
                   <input class="input-style" placeholder="2024" type="number" name="max_year" style="width: 38px;" value={% if criteria[3] and criteria[3][1] != 2024 %} "{{criteria[3][1]}}" {% endif %}>
                 </div>
               </div>
+              <div class="range-wrapper">
+                <h4>Runtime in minutes (min-max)</h4>
+                <div class="inner-range-wrapper">
+                  <input class="input-style" placeholder="0" type="number" name="min_runtime" style="width: 38px;" value={% if criteria[7] and criteria[7][0] != 0%} "{{criteria[7][0]}}" {% endif %}>
+                  <p>-</p>
+                  <input class="input-style" placeholder="467" type="number" name="max_runtime" style="width: 38px;" value={% if criteria[7] and criteria[7][1] != 467 %} "{{criteria[7][1]}}" {% endif %}>
+                </div>
+              </div>
             </div>
             <div class="sp" style="margin-top: 30px;margin-bottom: 30px;">
                 <button value="generate" class="sparkle-button">

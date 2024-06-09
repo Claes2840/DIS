@@ -57,6 +57,10 @@ def filter_rating(rating_range: tuple[float, float]) -> str:
 def filter_releaseyear(year_range: tuple[int, int]) -> str:
     min_year, max_year = year_range
     return f"(releaseYear >= {min_year} AND releaseYear <= {max_year})\n"
+
+def filter_runtime(runtime_range: int) -> str:
+    min_runtime, max_runtime = runtime_range
+    return f"(runtimeMinutes >= {min_runtime} AND runtimeMinutes <= {max_runtime}) \n    AND "
             
 def filter_character(character: str) -> str:
     if character == "":
@@ -67,13 +71,14 @@ def filter_character(character: str) -> str:
 
 def pick_random_movies(criteria: tuple) -> Response:
     if criteria:
-        genres, keyword, rating_range, year_range, director, actor, character = criteria
+        genres, keyword, rating_range, year_range, director, actor, character, runtime_range = criteria
         query = ("SELECT *\nFROM Movies\nWHERE " +
                 filter_genre(genres) +
                 filter_keyword(keyword) +
                 filter_director(director) +
                 filter_actor(actor) +
                 filter_character(character) +
+                filter_runtime(runtime_range) +
                 filter_rating(rating_range) +
                 filter_releaseyear(year_range) +
                 "ORDER BY random();")
@@ -155,8 +160,10 @@ def get_criteria() -> tuple:
     director = request.form.get('director', type=str)
     actor = request.form.get('actor', type=str)
     character = request.form.get('character', type=str)
+    runtime_range = (request.form.get('min_runtime', 0, type=int),
+                     request.form.get('max_runtime', 467, type=int))
     
-    return genres, keyword, rating_range, year_range, director, actor, character
+    return genres, keyword, rating_range, year_range, director, actor, character, runtime_range
 
 @app.route("/contact")
 def contact() -> str:
