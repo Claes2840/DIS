@@ -110,14 +110,13 @@ def get_origin_countries(movie_id: str) -> str:
 
 @app.route("/", methods=['GET', 'POST'])
 def home() -> Response | str:
-    reset_criteria = session.get('reset_criteria', True)
-    if reset_criteria:
+    reset_criteria = request.args.get('reset_criteria', True)
+    if not reset_criteria == 'False':
         # Resetting criteria.
         session['criteria'] = []
     criteria = session.get('criteria')
     
     # Clearing data that might've been saved earlier.
-    session['reset_criteria'] = True
     session['pick'] = None
     session['i'] = 0
     cache.set('picked_movies', [])
@@ -172,8 +171,7 @@ def contact() -> str:
 @app.route("/bad_criteria", methods=['GET','POST'])
 def bad_criteria() -> Response | str:
     if request.method == 'POST':
-        session['reset_criteria'] = False
-        return redirect(url_for('home'))
+        return redirect(url_for('home', reset_criteria=False))
     return render_template('bad_criteria.html')
 
 @app.route("/movie/<movie_id>", methods=['GET','POST'])
@@ -193,8 +191,7 @@ def picked_movie(movie_id: str) -> Response | str:
             return redirect(url_for('picked_movie', movie_id=movies[i][0]))
         elif 'new_criteria' in pressed:
             # User wants to update their criteria.
-            session['reset_criteria'] = False
-            return redirect(url_for('home'))
+            return redirect(url_for('home', reset_criteria=False))
     
     cur = conn.cursor()
     movie_query = f'''
