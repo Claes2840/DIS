@@ -166,8 +166,8 @@ h4.movietitle {
 
 .range-container {
   display: flex;
-  margin: auto;
   gap: 13px;
+  justify-content: center;
 }
 
 .range-wrapper {
