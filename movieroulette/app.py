@@ -30,9 +30,9 @@ def filter_director(director_name: str) -> str:
     if director_name == "":
         return ""
     subquery = f'''(SELECT mid 
-           FROM Directs
+           FROM DirectedBy
            JOIN Directors
-           ON Directs.did = Directors.did AND primaryName ~* '\y{director_name}\y')'''
+           ON DirectedBy.did = Directors.did AND primaryName ~* '\y{director_name}\y')'''
     return f'''\n    id IN {subquery}\n    AND '''
 
 def filter_actor(actor_name: str) -> str:

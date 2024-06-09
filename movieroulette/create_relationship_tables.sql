@@ -11,16 +11,16 @@ COPY StarsIn(mid, aid, characterName)
     FROM 'path/to/tmp/stars_in.csv'
     CSV HEADER;
 
-DROP TABLE IF EXISTS Directs;
-CREATE TABLE Directs(
+DROP TABLE IF EXISTS DirectedBy;
+CREATE TABLE DirectedBy(
     mid varchar(10),
     did varchar(10),
     PRIMARY KEY (mid, did),
     FOREIGN KEY (mid) REFERENCES Movies,
     FOREIGN KEY (did) REFERENCES Directors    
 );
-COPY Directs(mid, did)
-    FROM 'path/to/tmp/directs.csv'
+COPY DirectedBy(mid, did)
+    FROM 'path/to/tmp/directed_by.csv'
     delimiter ','
     CSV HEADER;
 

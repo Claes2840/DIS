@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS StarsIn;
-DROP TABLE IF EXISTS Directs;
+DROP TABLE IF EXISTS DirectedBy;
 DROP TABLE IF EXISTS MovieGenreAssociations;
 DROP TABLE IF EXISTS OriginCountries;
 
