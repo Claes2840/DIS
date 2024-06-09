@@ -27,7 +27,7 @@ def filter_genre(genres: list[str]) -> str:
     return genre_conditions[:-4] + "))\n    AND "
 
 def filter_director(director_name: str) -> str:
-    if director_name == "":
+    if not director_name:
         return ""
     subquery = f'''(SELECT mid 
            FROM DirectedBy
@@ -36,7 +36,7 @@ def filter_director(director_name: str) -> str:
     return f'''\n    id IN {subquery}\n    AND '''
 
 def filter_actor(actor_name: str) -> str:
-    if actor_name == "":
+    if not actor_name:
         return ""
     subquery = f'''(SELECT mid 
            FROM StarsIn S
@@ -45,7 +45,7 @@ def filter_actor(actor_name: str) -> str:
     return f'''\n    id IN {subquery}\n    AND '''
 
 def filter_keyword(keyword: str) -> str:
-    if keyword == "":
+    if not keyword:
         return ""
     # Using (case-insensitive) regexes to find titles.
     return f"(primaryTitle ~* '\y{keyword}\y' OR originalTitle ~* '\y{keyword}\y') \n    AND "
@@ -63,7 +63,7 @@ def filter_runtime(runtime_range: int) -> str:
     return f"(runtimeMinutes >= {min_runtime} AND runtimeMinutes <= {max_runtime}) \n    AND "
             
 def filter_character(character: str) -> str:
-    if character == "":
+    if not character:
         return ""
     return f'''\n    id in (SELECT mid 
            FROM StarsIn
@@ -84,7 +84,6 @@ def pick_random_movies(criteria: tuple) -> Response:
                 "ORDER BY random();")
     else:
         query = "SELECT *\nFROM Movies\nORDER BY random();"
-    print(query)
     cur = conn.cursor()
     cur.execute(query)
     picks = cur.fetchall()
