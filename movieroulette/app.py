@@ -183,10 +183,7 @@ def picked_movie(movie_id: str) -> Response | str:
             i = session.get('i', 0)
             i = (i + 1) % len(movies)
             session['i'] = i
-            genres = get_genres(movies[i][0])
-            countries = get_origin_countries(movies[i][0])
-            return render_template(
-                'pickedmovie.html', content=movies[i], genres=genres, countries=countries)
+            return redirect(url_for('picked_movie', movie_id=movies[i][0]))
         elif 'new_criteria' in pressed:
             # User wants to update their criteria.
             session['reset_criteria'] = False
